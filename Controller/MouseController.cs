@@ -16,10 +16,6 @@ public class MouseController : MonoBehaviour
 
 	List<GameObject> dragPreviewObjects;
 
-	Tile.TYPE buildMode = Tile.TYPE.FLOOR;
-
-	Furniture.TYPE creatingFurniture;
-
 	void Start ()
 	{
 		cam = Camera.main;
@@ -101,10 +97,10 @@ public class MouseController : MonoBehaviour
 
 				// End drag;
 				if (Input.GetMouseButtonUp (0)) {
-					if (buildMode != Tile.TYPE.NONE) {
-						GetComponent<WorldController> ().buildTile (buildMode, x, y);
+					if (WorldController.Instance.buildMode != Tile.TYPE.NONE) {
+						GetComponent<WorldController> ().buildTile (WorldController.Instance.buildMode, x, y);
 					}
-					if (creatingFurniture != Furniture.TYPE.NONE) {
+					if (WorldController.Instance.creatingFurniture != Furniture.TYPE.NONE) {
 						Job job = GetComponent<WorldController> ().createInstallJobAt (Furniture.TYPE.WALL, x, y);
 						if (job != null) {
 							FurnitureSpritesView fsc = GetComponent<FurnitureSpritesView> ();
@@ -123,32 +119,5 @@ public class MouseController : MonoBehaviour
 		}
 	}
 
-	public void SetBuildMode(string type)
-	{
-		creatingFurniture = Furniture.TYPE.NONE;
-		switch (type) {
-		case "floor":
-			buildMode = Tile.TYPE.FLOOR;
-			break;
-		case "bulldoze":
-			buildMode = Tile.TYPE.EMPTY;
-			break;
-
-		default:
-			break;
-		}
-	}
-
-	public void SetCreateMode(string type)
-	{
-		buildMode = Tile.TYPE.NONE;
-		switch (type) {
-		case "wall":
-			creatingFurniture = Furniture.TYPE.WALL;
-			break;
-		default:
-			break;
-		}
-	}
 
 }

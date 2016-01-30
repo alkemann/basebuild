@@ -2,10 +2,17 @@
 
 public class WorldController : MonoBehaviour {
 
+	public static WorldController Instance;
 	public World world { get; protected set; }
+
+	public Tile.TYPE buildMode = Tile.TYPE.FLOOR;
+
+	public Furniture.TYPE creatingFurniture;
 
 	void OnEnable()
 	{
+		if (Instance == null)
+			Instance = this;
 		world = new World ();
 	}
 
