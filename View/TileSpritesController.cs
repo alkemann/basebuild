@@ -1,13 +1,20 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
-public class SpritesController : MonoBehaviour {
+public class TileSpritesController : MonoBehaviour {
 
 	public Sprite sprite_empty;
 	public Sprite sprite_floor;
 	public Sprite sprite_wall;
 
 	public GameObject tiles_parent;
+
+	Dictionary<Tile, GameObject> tileToGameObjectMap;
+
+	void Start ()
+	{
+		tileToGameObjectMap = new Dictionary<Tile, GameObject> ();
+	}
 
 	public void renderTiles (World world)
 	{
@@ -18,8 +25,9 @@ public class SpritesController : MonoBehaviour {
 		}
 	}
 
-	void onTileTypeChanged(Tile tile, GameObject go)
+	void onTileTypeChanged(Tile tile)
 	{
+		GameObject go = tileToGameObjectMap [tile];
 		SpriteRenderer sr = go.GetComponent<SpriteRenderer> ();
 		switch (tile.type) {
 		case Tile.TYPE.EMPTY:
@@ -29,7 +37,8 @@ public class SpritesController : MonoBehaviour {
 			sr.sprite = sprite_floor;
 			break;
 		default:
-			throw new System.Exception ("Uknown tile type");
+			Debug.LogError (tile);
+			throw new System.Exception ("Uknown tile type or NONE");
 		}
 	}
 
@@ -41,9 +50,10 @@ public class SpritesController : MonoBehaviour {
 		tile_go.AddComponent<SpriteRenderer> ();
 		tile_go.transform.SetParent (tiles_parent.transform, true);
 		Tile tile = world.getTileAt (x, y);
-		tile.registerOnChangeCallback((Tile t) => {
-			onTileTypeChanged(t, tile_go);
-		});
-		onTileTypeChanged(tile, tile_go); // call it once to do the first sprite set
+
+		tileToGameObjectMap [tile] = tile_go;
+
+		tile.registerOnChangeCallback(onTileTypeChanged);
+		onTileTypeChanged(tile); // call it once to do the first sprite set
 	}
 }
