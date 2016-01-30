@@ -31,6 +31,8 @@ public class MouseController : MonoBehaviour {
 		if ( Input.GetMouseButton(1) || Input.GetMouseButton(2) ) { // right or middle button
 			cam.transform.Translate (lastFramePosition - currFramePosition);
 		}
+		cam.orthographicSize -= cam.orthographicSize * Input.GetAxis ("Mouse ScrollWheel") * 0.8f;
+		cam.orthographicSize = Mathf.Clamp (cam.orthographicSize, 3, 50);
 	}
 
 	void cursor ()
@@ -81,14 +83,11 @@ public class MouseController : MonoBehaviour {
 				end_y = start_y;
 				start_y = tmp;
 			}
-			Debug.Log(string.Format("Starts at {0},{1} and ends stat {2},{3}", start_x, start_y, end_x, end_y));
 			for (int x = start_x; x <= end_x; x++) {
 				for (int y = start_y; y <= end_y; y++) {
 					Tile t = getTileAtWorldCoord (new Vector3(x, y, 0));
-//					Debug.Log (string.Format ("{0},{1}  {2}", x, y, t));
 					if (t != null)
-						t.switchType ();
-//						t.type = Tile.TYPE.EMPTY;
+						t.type = Tile.TYPE.FLOOR;
 				}
 			}
 
