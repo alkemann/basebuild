@@ -18,6 +18,8 @@ public class World {
 	List<Worker> workers;
 
 	Action<Worker> cbWorkerCreated;
+	Action<Tile> cbTileChanged;
+	Action<Job> cbJobCreated;
 
 	public World()
 	{
@@ -83,6 +85,8 @@ public class World {
 	{
 		Tile tile = tiles [x, y];
 		tile.type = buildMode;
+		if (cbTileChanged != null)
+			cbTileChanged (tile);
 	}
 
 	public Job createInstallJobAt (Furniture.TYPE type, int x, int y)
@@ -93,11 +97,23 @@ public class World {
 
 		Job job = new Job(tile, new Furniture (tile, type));
 		tasks.Enqueue (job);
+		if (cbJobCreated != null)
+			cbJobCreated (job);
 		return job;
+	}
+
+	public void registOnJobCreated(Action<Job> cb)
+	{
+		cbJobCreated += cb;
 	}
 
 	public void registerOnWorkerCreated(Action<Worker> cb)
 	{
 		cbWorkerCreated += cb;
+	}
+
+	public void registerOnTileChanged (Action<Tile> cb)
+	{
+		cbTileChanged += cb;
 	}
 }
