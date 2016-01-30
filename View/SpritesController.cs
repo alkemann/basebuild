@@ -7,6 +7,8 @@ public class SpritesController : MonoBehaviour {
 	public Sprite sprite_floor;
 	public Sprite sprite_wall;
 
+	public GameObject tiles_parent;
+
 	public void renderTiles (World world)
 	{
 		for (int x = 0; x < World.WIDTH; x++) {
@@ -37,8 +39,9 @@ public class SpritesController : MonoBehaviour {
 		tile_go.name = "Tile_" + x + "_" + y;
 		tile_go.transform.position = new Vector2 (x, y);
 		tile_go.AddComponent<SpriteRenderer> ();
+		tile_go.transform.SetParent (tiles_parent.transform);
 		Tile tile = world.getTileAt (x, y);
-		tile.registerOnChangeCallbac((Tile t) => {
+		tile.registerOnChangeCallback((Tile t) => {
 			onTileTypeChanged(t, tile_go);
 		});
 		onTileTypeChanged(tile, tile_go); // call it once to do the first sprite set

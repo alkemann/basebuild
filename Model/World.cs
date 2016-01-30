@@ -26,9 +26,11 @@ public class World {
 	public Tile getTileAt(int x, int y)
 	{
 		if (x<0 || x > WIDTH) {
-			throw new Exception ("x is out of map scope");
+			return null;
+			// throw new Exception ("x is out of map scope");
 		} else if (y<0 || y>HEIGHT) {
-			throw new Exception ("y is out of map scope");
+			return null;
+			// throw new Exception ("y is out of map scope");
 		}
 		return tiles[x,y];
 	}

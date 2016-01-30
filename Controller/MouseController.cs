@@ -8,6 +8,7 @@ public class MouseController : MonoBehaviour {
 	Camera cam;
 	Vector3 lastFramePosition;
 	Vector3 currFramePosition;
+	Vector3 dragStartPosition;
 
 	void Start () {
 		cam = Camera.main;
@@ -19,6 +20,7 @@ public class MouseController : MonoBehaviour {
 
 		cameraMovement ();
 		cursor ();
+		interaction ();
 
 		lastFramePosition =  cam.ScreenToWorldPoint (Input.mousePosition);
 		lastFramePosition.z = 0;
@@ -46,8 +48,50 @@ public class MouseController : MonoBehaviour {
 
 	Tile getTileAtWorldCoord(Vector3 coord)
 	{
-		int x = Mathf.FloorToInt (currFramePosition.x);
-		int y = Mathf.FloorToInt (currFramePosition.y);
+		int x = Mathf.FloorToInt (coord.x);
+		int y = Mathf.FloorToInt (coord.y);
 		return GetComponent<WorldController> ().getTileAt (x, y);
+	}
+
+	void interaction ()
+	{
+		
+		// quick grab coordinate of a tile
+		if (Input.GetMouseButtonDown (4)) {
+			Debug.Log (string.Format ("Starts at {0},{1}", Mathf.FloorToInt( currFramePosition.x ), Mathf.FloorToInt( currFramePosition.y )));
+		}
+
+		// Start drag
+		if (Input.GetMouseButtonDown (0)) {
+			dragStartPosition = currFramePosition;
+		}
+		// End drag;
+		if (Input.GetMouseButtonUp (0)) {
+			int start_x = Mathf.FloorToInt( dragStartPosition.x );
+			int end_x = Mathf.FloorToInt( currFramePosition.x );
+			if (end_x < start_x) {
+				int tmp = end_x;
+				end_x = start_x;
+				start_x = tmp;
+			}
+			int start_y = Mathf.FloorToInt( dragStartPosition.y );
+			int end_y = Mathf.FloorToInt( currFramePosition.y );
+			if (end_y < start_y) {
+				int tmp = end_y;
+				end_y = start_y;
+				start_y = tmp;
+			}
+			Debug.Log(string.Format("Starts at {0},{1} and ends stat {2},{3}", start_x, start_y, end_x, end_y));
+			for (int x = start_x; x <= end_x; x++) {
+				for (int y = start_y; y <= end_y; y++) {
+					Tile t = getTileAtWorldCoord (new Vector3(x, y, 0));
+//					Debug.Log (string.Format ("{0},{1}  {2}", x, y, t));
+					if (t != null)
+						t.switchType ();
+//						t.type = Tile.TYPE.EMPTY;
+				}
+			}
+
+		}
 	}
 }

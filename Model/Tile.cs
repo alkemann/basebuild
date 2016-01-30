@@ -43,4 +43,19 @@ public class Tile  {
 	{
 		cbTileChanged += cb;
 	}
+
+	public void switchType ()
+	{
+
+		if (this.type == Tile.TYPE.FLOOR) 
+			this.type = Tile.TYPE.EMPTY;
+		else
+			this.type = Tile.TYPE.FLOOR;
+
+	}
+	public override string ToString ()
+	{
+		return string.Format ("[Tile: type={0}, x={1}, y={2}]", type, x, y);
+	}
+	
 }
