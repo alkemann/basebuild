@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class MouseController : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class MouseController : MonoBehaviour
 	Vector3 dragStartPosition;
 
 	List<GameObject> dragPreviewObjects;
+
+	Tile.TYPE currentlyBuilding;
 
 	void Start ()
 	{
@@ -51,7 +54,11 @@ public class MouseController : MonoBehaviour
 
 	void interaction ()
 	{
-		
+		// if over ui, dont do this thing
+		if (EventSystem.current.IsPointerOverGameObject ()) {
+			return;
+		}
+
 		// quick grab coordinate of a tile
 		if (Input.GetMouseButtonDown (4)) {
 			Debug.Log (string.Format ("Starts at {0},{1}", Mathf.FloorToInt (currFramePosition.x), Mathf.FloorToInt (currFramePosition.y)));
@@ -93,7 +100,7 @@ public class MouseController : MonoBehaviour
 				// End drag;
 				if (Input.GetMouseButtonUp (0)) {
 					// Build all
-					t.type = Tile.TYPE.FLOOR;
+					t.type = currentlyBuilding;
 				} else
 					// Dragging
 					if (Input.GetMouseButton (0) && !Input.GetMouseButtonDown (0)) {
@@ -103,6 +110,21 @@ public class MouseController : MonoBehaviour
 					dragPreviewObjects.Add (go);
 				}
 			}
+		}
+	}
+
+	public void SetBuildMode(string type)
+	{
+		switch (type) {
+		case "floor":
+			currentlyBuilding = Tile.TYPE.FLOOR;
+			break;
+		case "bulldoze":
+			currentlyBuilding = Tile.TYPE.EMPTY;
+			break;
+
+		default:
+			break;
 		}
 	}
 }
