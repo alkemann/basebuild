@@ -29,7 +29,11 @@ public class Tile  {
 	Action<Tile> cbTileChanged;
 
 	public Job job { get; protected set; }
-	Furniture installedFurniture;
+	public Furniture installedFurniture {
+		get;
+		protected set;
+	}
+
 	// inventory
 
 	public Tile (World world, int x, int y)
@@ -53,6 +57,11 @@ public class Tile  {
 	public override string ToString ()
 	{
 		return string.Format ("[Tile: type={0}, x={1}, y={2}]", type, x, y);
+	}
+
+	public bool isInstalled ()
+	{
+		return installedFurniture != null;
 	}
 
 	public bool hasJob ()

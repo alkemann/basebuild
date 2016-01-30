@@ -5,7 +5,7 @@ using System;
 public class Furniture {
 	public enum TYPE { NONE, WALL };
 
-	private TYPE type;
+	public TYPE type { get; protected set; }
 
 	public Tile tile { get; protected set; }
 

@@ -15,6 +15,11 @@ public class WorldController : MonoBehaviour {
 		return world.getTileAt (x, y);
 	}
 
+	public void buildTile (Tile.TYPE new_tile_type, int x, int y)
+	{
+		world.buildTileAt (new_tile_type, x, y);
+	}
+
 	public Job createInstallJobAt(Furniture.TYPE type, int x, int y)
 	{
 		return world.createInstallJobAt (type, x, y);

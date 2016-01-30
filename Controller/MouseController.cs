@@ -96,21 +96,20 @@ public class MouseController : MonoBehaviour
 
 		for (int x = start_x; x <= end_x; x++) {
 			for (int y = start_y; y <= end_y; y++) {
-				Tile t = getTileAtWorldCoord (new Vector3 (x, y, 0));
-				if (t == null)
+				if (World.isCoordinatesWithinBuildWorld(x, y) == false)
 					continue; // no tile here, out of map
 
 				// End drag;
 				if (Input.GetMouseButtonUp (0)) {
 					if (buildMode != Tile.TYPE.NONE) {
-						
-						// Build all
-						t.type = buildMode;
+						GetComponent<WorldController> ().buildTile (buildMode, x, y);
 					}
 					if (creatingFurniture != Furniture.TYPE.NONE) {
 						Job job = GetComponent<WorldController> ().createInstallJobAt (Furniture.TYPE.WALL, x, y);
-						FurnitureSpritesController fsc = GetComponent<FurnitureSpritesController> ();
-						fsc.jobCreated (job);
+						if (job != null) {
+							FurnitureSpritesController fsc = GetComponent<FurnitureSpritesController> ();
+							fsc.jobCreated (job);
+						}
 					}
 				} else
 					// Dragging

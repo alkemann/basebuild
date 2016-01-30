@@ -15,6 +15,10 @@ public class World {
 		tiles = new Tile[WIDTH, HEIGHT];
 		createTiles ();
 		jobs = new List<Job> ();
+
+	public static bool isCoordinatesWithinBuildWorld (int x, int y)
+	{
+		return (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT);
 	}
 
 	void createTiles ()
@@ -44,10 +48,16 @@ public class World {
 		}
 	}
 
+	public void buildTileAt (Tile.TYPE buildMode, int x, int y)
+	{
+		Tile tile = tiles [x, y];
+		tile.type = buildMode;
+	}
+
 	public Job createInstallJobAt (Furniture.TYPE type, int x, int y)
 	{
 		Tile tile = tiles [x, y];
-		if (tile.hasJob ())
+		if (tile.hasJob () || tile.isInstalled() || tile.type == Tile.TYPE.EMPTY)
 			return null;
 
 		Job job = new Job(tile, new Furniture (tile, type));
