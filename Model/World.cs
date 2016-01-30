@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class World {
@@ -8,10 +8,13 @@ public class World {
 	public const int WIDTH = 100;
 	public const int HEIGHT = 100;
 
+	List<Job> jobs;
+
 	public World()
 	{
 		tiles = new Tile[WIDTH, HEIGHT];
 		createTiles ();
+		jobs = new List<Job> ();
 	}
 
 	void createTiles ()
@@ -39,5 +42,17 @@ public class World {
 			Debug.Log (e.StackTrace);
 			return null;
 		}
+	}
+
+	public Job createInstallJobAt (Furniture.TYPE type, int x, int y)
+	{
+		Tile tile = tiles [x, y];
+		if (tile.hasJob ())
+			return null;
+
+		Job job = new Job(tile, new Furniture (tile, type));
+
+//		jobs.Add (job);
+		return job;
 	}
 }

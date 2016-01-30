@@ -4,7 +4,7 @@ using System;
 
 public class Tile  {
 
-	public enum TYPE { EMPTY, FLOOR };
+	public enum TYPE { NONE, EMPTY, FLOOR };
 
 	TYPE tileType;
 	public TYPE type {
@@ -25,18 +25,19 @@ public class Tile  {
 	public int x { get; protected set; }
 	public int y { get; protected set; }
 
+	Action<Tile> cbJobComplete;
 	Action<Tile> cbTileChanged;
+
+	public Job job { get; protected set; }
+	Furniture installedFurniture;
+	// inventory
 
 	public Tile (World world, int x, int y)
 	{
 		this.world = world;
 		this.x = x;
 		this.y = y;
-
-		if (UnityEngine.Random.Range (0, 2) == 0)
-			this.type = Tile.TYPE.EMPTY;
-		else
-			this.type = Tile.TYPE.FLOOR;
+		this.tileType = TYPE.EMPTY;
 	}
 
 	public void registerOnChangeCallback(Action<Tile> cb)
@@ -44,18 +45,33 @@ public class Tile  {
 		cbTileChanged += cb;
 	}
 
-	public void switchType ()
+	public void registerOnJobCompleteCallback(Action<Tile> cb)
 	{
-
-		if (this.type == Tile.TYPE.FLOOR) 
-			this.type = Tile.TYPE.EMPTY;
-		else
-			this.type = Tile.TYPE.FLOOR;
-
+		cbJobComplete += cb;
 	}
+
 	public override string ToString ()
 	{
 		return string.Format ("[Tile: type={0}, x={1}, y={2}]", type, x, y);
 	}
-	
+
+	public bool hasJob ()
+	{
+		return job != null;
+	}
+
+	public void setJob (Job job)
+	{
+		this.job = job;
+		job.registerOnCompleteCallback (installFurniture);
+	}
+
+	void installFurniture(Job job)
+	{
+		Tile t = job.tile;
+		installedFurniture = job.furniture;
+		if (cbJobComplete != null)
+			cbJobComplete (t);
+		t.job = null;
+	}
 }

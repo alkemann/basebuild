@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class WorldController : MonoBehaviour {
 
@@ -8,11 +7,16 @@ public class WorldController : MonoBehaviour {
 	void Start ()
 	{
 		world = new World ();
-		GetComponentInParent<SpritesController> ().renderTiles (world);
+		GetComponentInParent<TileSpritesController> ().renderTiles (world);
 	}
 
 	public Tile getTileAt(int x, int y)
 	{
 		return world.getTileAt (x, y);
+	}
+
+	public Job createInstallJobAt(Furniture.TYPE type, int x, int y)
+	{
+		return world.createInstallJobAt (type, x, y);
 	}
 }

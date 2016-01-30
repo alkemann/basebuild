@@ -16,7 +16,9 @@ public class MouseController : MonoBehaviour
 
 	List<GameObject> dragPreviewObjects;
 
-	Tile.TYPE currentlyBuilding;
+	Tile.TYPE buildMode = Tile.TYPE.FLOOR;
+
+	Furniture.TYPE creatingFurniture;
 
 	void Start ()
 	{
@@ -59,6 +61,7 @@ public class MouseController : MonoBehaviour
 			return;
 		}
 
+
 		// quick grab coordinate of a tile
 		if (Input.GetMouseButtonDown (4)) {
 			Debug.Log (string.Format ("Starts at {0},{1}", Mathf.FloorToInt (currFramePosition.x), Mathf.FloorToInt (currFramePosition.y)));
@@ -99,8 +102,16 @@ public class MouseController : MonoBehaviour
 
 				// End drag;
 				if (Input.GetMouseButtonUp (0)) {
-					// Build all
-					t.type = currentlyBuilding;
+					if (buildMode != Tile.TYPE.NONE) {
+						
+						// Build all
+						t.type = buildMode;
+					}
+					if (creatingFurniture != Furniture.TYPE.NONE) {
+						Job job = GetComponent<WorldController> ().createInstallJobAt (Furniture.TYPE.WALL, x, y);
+						FurnitureSpritesController fsc = GetComponent<FurnitureSpritesController> ();
+						fsc.jobCreated (job);
+					}
 				} else
 					// Dragging
 					if (Input.GetMouseButton (0) && !Input.GetMouseButtonDown (0)) {
@@ -115,16 +126,30 @@ public class MouseController : MonoBehaviour
 
 	public void SetBuildMode(string type)
 	{
+		creatingFurniture = Furniture.TYPE.NONE;
 		switch (type) {
 		case "floor":
-			currentlyBuilding = Tile.TYPE.FLOOR;
+			buildMode = Tile.TYPE.FLOOR;
 			break;
 		case "bulldoze":
-			currentlyBuilding = Tile.TYPE.EMPTY;
+			buildMode = Tile.TYPE.EMPTY;
 			break;
 
 		default:
 			break;
 		}
 	}
+
+	public void SetCreateMode(string type)
+	{
+		buildMode = Tile.TYPE.NONE;
+		switch (type) {
+		case "wall":
+			creatingFurniture = Furniture.TYPE.WALL;
+			break;
+		default:
+			break;
+		}
+	}
+
 }
