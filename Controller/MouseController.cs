@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class MouseController : MonoBehaviour {
+public class MouseController : MonoBehaviour
+{
 
 	public GameObject cursor_prefab;
 	public GameObject preview_parent;
@@ -13,33 +14,35 @@ public class MouseController : MonoBehaviour {
 	Vector3 dragStartPosition;
 
 	List<GameObject> dragPreviewObjects;
-	void Start () {
+
+	void Start ()
+	{
 		cam = Camera.main;
 		dragPreviewObjects = new List<GameObject> ();
 	}
-	
-	void Update () {
+
+	void Update ()
+	{
 		currFramePosition = cam.ScreenToWorldPoint (Input.mousePosition);
 		currFramePosition.z = 0;
 
 		cameraMovement ();
 		interaction ();
 
-		lastFramePosition =  cam.ScreenToWorldPoint (Input.mousePosition);
+		lastFramePosition = cam.ScreenToWorldPoint (Input.mousePosition);
 		lastFramePosition.z = 0;
 	}
 
 	void cameraMovement ()
 	{
-		if ( Input.GetMouseButton(1) || Input.GetMouseButton(2) ) { // right or middle button
+		if (Input.GetMouseButton (1) || Input.GetMouseButton (2)) { // right or middle button
 			cam.transform.Translate (lastFramePosition - currFramePosition);
 		}
 		cam.orthographicSize -= cam.orthographicSize * Input.GetAxis ("Mouse ScrollWheel") * 0.8f;
 		cam.orthographicSize = Mathf.Clamp (cam.orthographicSize, 3f, 30f);
 	}
 
-
-	Tile getTileAtWorldCoord(Vector3 coord)
+	Tile getTileAtWorldCoord (Vector3 coord)
 	{
 		int x = Mathf.FloorToInt (coord.x);
 		int y = Mathf.FloorToInt (coord.y);
@@ -51,7 +54,8 @@ public class MouseController : MonoBehaviour {
 		
 		// quick grab coordinate of a tile
 		if (Input.GetMouseButtonDown (4)) {
-			Debug.Log (string.Format ("Starts at {0},{1}", Mathf.FloorToInt( currFramePosition.x ), Mathf.FloorToInt( currFramePosition.y )));
+			Debug.Log (string.Format ("Starts at {0},{1}", Mathf.FloorToInt (currFramePosition.x), Mathf.FloorToInt (currFramePosition.y)));
+		}
 
 		int start_x = Mathf.FloorToInt (dragStartPosition.x);
 		int end_x = Mathf.FloorToInt (currFramePosition.x);
