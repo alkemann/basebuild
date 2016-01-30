@@ -1,17 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MouseController : MonoBehaviour {
 
-	public GameObject cursor_go;
+	public GameObject cursor_prefab;
+	public GameObject preview_parent;
 
 	Camera cam;
 	Vector3 lastFramePosition;
 	Vector3 currFramePosition;
 	Vector3 dragStartPosition;
 
+	List<GameObject> dragPreviewObjects;
 	void Start () {
 		cam = Camera.main;
+		dragPreviewObjects = new List<GameObject> ();
 	}
 	
 	void Update () {
@@ -19,7 +23,6 @@ public class MouseController : MonoBehaviour {
 		currFramePosition.z = 0;
 
 		cameraMovement ();
-		cursor ();
 		interaction ();
 
 		lastFramePosition =  cam.ScreenToWorldPoint (Input.mousePosition);
@@ -32,19 +35,7 @@ public class MouseController : MonoBehaviour {
 			cam.transform.Translate (lastFramePosition - currFramePosition);
 		}
 		cam.orthographicSize -= cam.orthographicSize * Input.GetAxis ("Mouse ScrollWheel") * 0.8f;
-		cam.orthographicSize = Mathf.Clamp (cam.orthographicSize, 3, 50);
-	}
-
-	void cursor ()
-	{
-		// cursor_go.transform.position = currFramePosition; // moves  cursor to freeform cursor
-		Tile t = getTileAtWorldCoord(currFramePosition);
-		if (t == null) {
-			cursor_go.SetActive (false);
-		} else {
-			cursor_go.SetActive (true);
-			cursor_go.transform.position = new Vector3 (t.x, t.y, 0);
-		}
+		cam.orthographicSize = Mathf.Clamp (cam.orthographicSize, 3f, 30f);
 	}
 
 
@@ -61,36 +52,53 @@ public class MouseController : MonoBehaviour {
 		// quick grab coordinate of a tile
 		if (Input.GetMouseButtonDown (4)) {
 			Debug.Log (string.Format ("Starts at {0},{1}", Mathf.FloorToInt( currFramePosition.x ), Mathf.FloorToInt( currFramePosition.y )));
+
+		int start_x = Mathf.FloorToInt (dragStartPosition.x);
+		int end_x = Mathf.FloorToInt (currFramePosition.x);
+		if (end_x < start_x) {
+			int tmp = end_x;
+			end_x = start_x;
+			start_x = tmp;
+		}
+		int start_y = Mathf.FloorToInt (dragStartPosition.y);
+		int end_y = Mathf.FloorToInt (currFramePosition.y);
+		if (end_y < start_y) {
+			int tmp = end_y;
+			end_y = start_y;
+			start_y = tmp;
 		}
 
 		// Start drag
 		if (Input.GetMouseButtonDown (0)) {
 			dragStartPosition = currFramePosition;
 		}
-		// End drag;
-		if (Input.GetMouseButtonUp (0)) {
-			int start_x = Mathf.FloorToInt( dragStartPosition.x );
-			int end_x = Mathf.FloorToInt( currFramePosition.x );
-			if (end_x < start_x) {
-				int tmp = end_x;
-				end_x = start_x;
-				start_x = tmp;
-			}
-			int start_y = Mathf.FloorToInt( dragStartPosition.y );
-			int end_y = Mathf.FloorToInt( currFramePosition.y );
-			if (end_y < start_y) {
-				int tmp = end_y;
-				end_y = start_y;
-				start_y = tmp;
-			}
-			for (int x = start_x; x <= end_x; x++) {
-				for (int y = start_y; y <= end_y; y++) {
-					Tile t = getTileAtWorldCoord (new Vector3(x, y, 0));
-					if (t != null)
-						t.type = Tile.TYPE.FLOOR;
+
+		// clean up preview
+		while (dragPreviewObjects.Count > 0) {
+			GameObject go = dragPreviewObjects [0];
+			dragPreviewObjects.RemoveAt (0);
+			SimplePool.Despawn (go);
+		}
+
+		for (int x = start_x; x <= end_x; x++) {
+			for (int y = start_y; y <= end_y; y++) {
+				Tile t = getTileAtWorldCoord (new Vector3 (x, y, 0));
+				if (t == null)
+					continue; // no tile here, out of map
+
+				// End drag;
+				if (Input.GetMouseButtonUp (0)) {
+					// Build all
+					t.type = Tile.TYPE.FLOOR;
+				} else
+					// Dragging
+					if (Input.GetMouseButton (0) && !Input.GetMouseButtonDown (0)) {
+					// Display a preview of drag area
+					GameObject go = SimplePool.Spawn (cursor_prefab, new Vector3 (x, y, 0), Quaternion.identity);
+					go.transform.SetParent (preview_parent.transform);
+					dragPreviewObjects.Add (go);
 				}
 			}
-
 		}
 	}
 }
