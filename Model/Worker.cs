@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Worker {
 
@@ -23,6 +24,8 @@ public class Worker {
 
 	Job job;
 
+	Action<Worker> cbStateChange;
+
 	public Worker(Tile tile)
 	{
 		currentTile = destinationTile = tile;
@@ -30,21 +33,7 @@ public class Worker {
 
 	public void tick(float deltaTime)
 	{
-		if (destinationTile == currentTile) {
-			// Not moving, can do work or grab a new job
-			if (job == null) {
-				// doesnt have a job, look for one
-				this.job = currentTile.world.task();
-			} else {
-				if (currentTile == job.tile) {
-					if (job.doWork (deltaTime * work_speed)) {
-						job = null;
-					}
-				} else {
-					destinationTile = job.tile;
-				}
-			}
-		} else {
+		if (isMoving()) {
 			float distToTravel = Mathf.Sqrt(Mathf.Pow(currentTile.X - destinationTile.X, 2) + Mathf.Pow(currentTile.Y - destinationTile.Y, 2));
 			float distThisFrame = walk_speed * deltaTime;
 			float percThisFrame = distThisFrame / distToTravel;
@@ -53,6 +42,25 @@ public class Worker {
 				// reach destination
 				currentTile = destinationTile;
 				movementPercentage = 0;
+				if (cbStateChange != null)
+					cbStateChange (this);
+			}
+		} else {
+			// Not moving, can do work or grab a new job
+			if (job == null) {
+				// doesnt have a job, look for one
+				Job new_job = currentTile.world.task();
+				if (new_job != null) {
+					setJob (new_job);
+				}
+			} else {
+				if (currentTile == job.tile) {
+					if (job.doWork (deltaTime * work_speed)) {
+						setJob (null);
+					}
+				} else {
+					setDestination(job.tile);
+				}
 			}
 		}
 	}
@@ -62,8 +70,27 @@ public class Worker {
 		return destinationTile != currentTile;
 	}
 
+	public bool isWorking ()
+	{
+		return job != null && !isMoving ();
+	}
+
+	public void setJob(Job job)
+	{
+		this.job = job;
+		if (cbStateChange != null)
+			cbStateChange (this);
+	}
+
 	public void setDestination(Tile tile)
 	{
 		destinationTile = tile;
+		if (isMoving() && cbStateChange != null)
+			cbStateChange (this);
+	}
+
+	public void registerOnStateChangeCallback(Action<Worker> cb)
+	{
+		cbStateChange += cb;
 	}
 }

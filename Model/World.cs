@@ -17,14 +17,22 @@ public class World {
 
 	List<Worker> workers;
 
+	Action<Worker> cbWorkerCreated;
+
 	public World()
 	{
 		tiles = new Tile[WIDTH, HEIGHT];
 		createTiles ();
 		tasks = new JobQueue ();
 		workers = new List<Worker> ();
-		Worker w = new Worker (tiles [WIDTH / 2, HEIGHT / 2]);
+	}
+
+	public void createWorkerAt(int x, int y)
+	{
+		Worker w = new Worker (tiles [x,y]);
 		workers.Add (w);
+		if (cbWorkerCreated != null)
+			cbWorkerCreated (w);
 	}
 
 	public void tick (float deltaTime)
@@ -86,5 +94,10 @@ public class World {
 		Job job = new Job(tile, new Furniture (tile, type));
 		tasks.Enqueue (job);
 		return job;
+	}
+
+	public void registerOnWorkerCreated(Action<Worker> cb)
+	{
+		cbWorkerCreated += cb;
 	}
 }

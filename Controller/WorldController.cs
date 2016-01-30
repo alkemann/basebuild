@@ -2,13 +2,17 @@
 
 public class WorldController : MonoBehaviour {
 
-	World world;
+	public World world { get; protected set; }
+
+	void OnEnable()
+	{
+		world = new World ();
+	}
 
 	void Start ()
 	{
-		world = new World ();
 		GetComponentInParent<TileSpritesView> ().renderTiles (world);
-		GetComponentInParent<WorkerSpritesView> ().renderWorkers(world);
+		world.createWorkerAt (World.WIDTH / 2, World.HEIGHT / 2); // FIXME for test purposes
 	}
 
 	public void Update()
