@@ -25,13 +25,18 @@ public class World {
 
 	public Tile getTileAt(int x, int y)
 	{
-		if (x<0 || x > WIDTH) {
+		if (x < 0 || x >= WIDTH) {
 			return null;
 			// throw new Exception ("x is out of map scope");
-		} else if (y<0 || y>HEIGHT) {
+		} else if (y < 0 || y >= HEIGHT) {
 			return null;
 			// throw new Exception ("y is out of map scope");
 		}
-		return tiles[x,y];
+		try {
+			return tiles[x,y];
+		} catch (IndexOutOfRangeException e) {
+			Debug.LogError( string.Format( " Trying to access {0},{1}", x, y ));
+			return null;
+		}
 	}
 }
