@@ -36,6 +36,7 @@ public class World {
 			return tiles[x,y];
 		} catch (IndexOutOfRangeException e) {
 			Debug.LogError( string.Format( " Trying to access {0},{1}", x, y ));
+			Debug.Log (e.StackTrace);
 			return null;
 		}
 	}

@@ -39,7 +39,7 @@ public class SpritesController : MonoBehaviour {
 		tile_go.name = "Tile_" + x + "_" + y;
 		tile_go.transform.position = new Vector2 (x, y);
 		tile_go.AddComponent<SpriteRenderer> ();
-		tile_go.transform.SetParent (tiles_parent.transform);
+		tile_go.transform.SetParent (tiles_parent.transform, true);
 		Tile tile = world.getTileAt (x, y);
 		tile.registerOnChangeCallback((Tile t) => {
 			onTileTypeChanged(t, tile_go);

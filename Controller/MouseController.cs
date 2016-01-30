@@ -99,7 +99,7 @@ public class MouseController : MonoBehaviour
 					if (Input.GetMouseButton (0) && !Input.GetMouseButtonDown (0)) {
 					// Display a preview of drag area
 					GameObject go = SimplePool.Spawn (cursor_prefab, new Vector3 (x, y, 0), Quaternion.identity);
-					go.transform.SetParent (preview_parent.transform);
+					go.transform.SetParent (preview_parent.transform, true);
 					dragPreviewObjects.Add (go);
 				}
 			}
