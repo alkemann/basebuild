@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class TileSpritesController : MonoBehaviour {
+public class TileSpritesView : MonoBehaviour {
 
 	public Sprite sprite_empty;
 	public Sprite sprite_floor;

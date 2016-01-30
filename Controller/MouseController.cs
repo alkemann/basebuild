@@ -107,7 +107,7 @@ public class MouseController : MonoBehaviour
 					if (creatingFurniture != Furniture.TYPE.NONE) {
 						Job job = GetComponent<WorldController> ().createInstallJobAt (Furniture.TYPE.WALL, x, y);
 						if (job != null) {
-							FurnitureSpritesController fsc = GetComponent<FurnitureSpritesController> ();
+							FurnitureSpritesView fsc = GetComponent<FurnitureSpritesView> ();
 							fsc.jobCreated (job);
 						}
 					}

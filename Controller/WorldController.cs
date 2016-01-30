@@ -7,7 +7,7 @@ public class WorldController : MonoBehaviour {
 	void Start ()
 	{
 		world = new World ();
-		GetComponentInParent<TileSpritesController> ().renderTiles (world);
+		GetComponentInParent<TileSpritesView> ().renderTiles (world);
 	}
 
 	public Tile getTileAt(int x, int y)
