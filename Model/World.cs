@@ -8,13 +8,36 @@ public class World {
 	public const int WIDTH = 100;
 	public const int HEIGHT = 100;
 
-	List<Job> jobs;
+	JobQueue tasks;
+
+	public Job task ()
+	{
+		return tasks.Dequeue ();
+	}
+
+	List<Worker> workers;
 
 	public World()
 	{
 		tiles = new Tile[WIDTH, HEIGHT];
 		createTiles ();
-		jobs = new List<Job> ();
+		tasks = new JobQueue ();
+		workers = new List<Worker> ();
+		Worker w = new Worker (tiles [WIDTH / 2, HEIGHT / 2]);
+		workers.Add (w);
+	}
+
+	public void tick (float deltaTime)
+	{
+		foreach(Worker w in getWorkers()) {
+			w.tick (Time.deltaTime);
+		}
+	}
+
+	public List<Worker> getWorkers ()
+	{
+		return workers;
+	}
 
 	public static bool isCoordinatesWithinBuildWorld (int x, int y)
 	{
@@ -61,8 +84,7 @@ public class World {
 			return null;
 
 		Job job = new Job(tile, new Furniture (tile, type));
-
-//		jobs.Add (job);
+		tasks.Enqueue (job);
 		return job;
 	}
 }

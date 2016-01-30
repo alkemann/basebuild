@@ -8,6 +8,12 @@ public class WorldController : MonoBehaviour {
 	{
 		world = new World ();
 		GetComponentInParent<TileSpritesView> ().renderTiles (world);
+		GetComponentInParent<WorkerSpritesView> ().renderWorkers(world);
+	}
+
+	public void Update()
+	{
+		world.tick (Time.deltaTime);
 	}
 
 	public Tile getTileAt(int x, int y)
