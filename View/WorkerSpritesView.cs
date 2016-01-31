@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class WorkerSpritesView : MonoBehaviour {
 
 	Dictionary<Worker, GameObject> workerToGameObjectMap;
 
+	List<Sprite> spriteMap;
 	public GameObject char_prefab;
-	public Sprite moving_sprite;
-	public Sprite resting_sprite;
-	public Sprite working_sprite;
 	public GameObject character_parent;
 
 	public void Start()
@@ -16,6 +15,10 @@ public class WorkerSpritesView : MonoBehaviour {
 		workerToGameObjectMap = new Dictionary<Worker, GameObject> ();
 		GetComponent<WorldController> ().world.registerOnWorkerCreated (onWorkerCreated);
 
+		spriteMap = new List<Sprite> ();
+		foreach (Sprite s in Resources.LoadAll<Sprite> ("Images/Characters")) {
+			spriteMap.Add(s);
+		}
 	}
 
 	public void Update()
@@ -34,19 +37,21 @@ public class WorkerSpritesView : MonoBehaviour {
 		GameObject go = Instantiate (char_prefab);
 		go.transform.SetParent (character_parent.transform);
 		workerToGameObjectMap [worker] = go;
-		worker.registerOnStateChangeCallback (onWorkerStateChanged);
+
+		int sprite_id = (int) Mathf.Round (Random.Range (0, spriteMap.Count));
+		go.GetComponent<SpriteRenderer> ().sprite = spriteMap [ sprite_id ];
+//		worker.registerOnStateChangeCallback (onWorkerStateChanged);
 	}
 
 	void onWorkerStateChanged(Worker worker)
 	{
-		GameObject go = workerToGameObjectMap [worker];
+//		GameObject go = workerToGameObjectMap [worker];
 		if (worker.isMoving ()) {
-			go.transform.position = new Vector3 (worker.X, worker.Y, -1);
-			go.GetComponent<SpriteRenderer> ().sprite = moving_sprite;
+			//moving
 		} else if (worker.isWorking ()) {
-			go.GetComponent<SpriteRenderer> ().sprite = working_sprite;
+			// working
 		} else {
-			go.GetComponent<SpriteRenderer> ().sprite = resting_sprite;
+			// resting
 		}
 	}
 }
