@@ -20,7 +20,14 @@ public class SoundsView : MonoBehaviour
 	void onJobCreated (Job job)
 	{
 		job.registerOnCompleteCallback ((j) => {
-			onFurnitureCreated(j.furniture);
+			switch (j.type) {
+			case Job.TYPE.INSTALL:
+				onFurnitureCreated(j.tile.Furniture);
+				break;
+			default:
+				// no sournd
+				break;
+			}
 		});
 		if (soundCooldown > 0)
 			return;

@@ -103,8 +103,14 @@ public class World {
 		if (tile.hasJob () || tile.isInstalled() || tile.type == Tile.TYPE.EMPTY)
 			return null;
 
-		Job job = new Job(tile, new Furniture (tile, type));
+		// TODO: Furniture Prototype to grab data like work cost?
+		Job job = new Job(tile, 2f, Job.TYPE.INSTALL);
 		tasks.Enqueue (job);
+		job.registerOnCompleteCallback ((j) => {
+			Tile job_tile = j.tile;
+			job_tile.installFurniture(new Furniture (job_tile, type));
+			job_tile.setJob(null); // remove the job from tile
+		});
 		if (cbJobCreated != null)
 			cbJobCreated (job);
 		return job;
@@ -115,7 +121,7 @@ public class World {
 		Tile tile = tiles [x, y];
 		if (tile.hasJob ())
 			return null;
-		Job job = new Job (tile, null, 0.01f);
+		Job job = new Job (tile, 0.01f, Job.TYPE.MOVE);
 		tasks.Enqueue (job);
 		if (cbJobCreated != null)
 			cbJobCreated (job);

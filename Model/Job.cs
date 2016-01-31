@@ -4,18 +4,20 @@ using System;
 
 public class Job {
 
-	float work = 2f;
+	public enum TYPE { NONE, MOVE, CONSTRUCT, INSTALL }
 
+	public TYPE type { get; protected set; }
 	public Tile tile { get; protected set; }
-	public Furniture furniture { get; protected set; }
 
 	Action<Job> cbOnComplete;
+	Action<Job> cbOnCancel;
+	float work = 2f;
 
-	public Job (Tile tile, Furniture furn = null, float work = 2f)
+	public Job (Tile tile, float work = 2f, TYPE type = TYPE.INSTALL)
 	{
 		this.tile = tile;
 		this.work = work;
-		this.furniture = furn;
+		this.type = type;
 		tile.setJob (this);
 	}
 
@@ -40,5 +42,15 @@ public class Job {
 	public void unregisterOnCompleteCallback(Action<Job> cb)
 	{
 		cbOnComplete -= cb;
+	}
+
+	public void registerOnCancelCallback(Action<Job> cb)
+	{
+		cbOnCancel += cb;
+	}
+
+	public void unregisterOnCancelCallback(Action<Job> cb)
+	{
+		cbOnCancel -= cb;
 	}
 }

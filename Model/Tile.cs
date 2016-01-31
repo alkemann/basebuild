@@ -25,15 +25,38 @@ public class Tile  {
 	public int X { get; protected set; }
 	public int Y { get; protected set; }
 
-	Action<Tile> cbJobComplete;
+	Action<Tile> cbFurnitureInstalled;
 	Action<Tile> cbTileChanged;
 
 	public Job job { get; protected set; }
-	public Furniture installedFurniture {
-		get;
-		protected set;
-	}
+	public Furniture Furniture  {get; private set;}
 
+	public void installFurniture (Furniture furn)
+	{
+		if (this.Furniture != null) {
+			throw new Exception ("Cant install where already there is one");
+		}
+		this.Furniture = furn;
+		// trigger onFurnitureChanged for the 4 neighbors if linked
+		if (furn.linkedObject) {
+			// Linked object, we need to upgrade neighbours
+			Tile tile_to_north = world.getTileAt (X, Y + 1);
+			if (tile_to_north != null && tile_to_north.Furniture != null && tile_to_north.Furniture.type == furn.type) 
+				tile_to_north.Furniture.neighbourChanged (this);
+			Tile tile_to_east = world.getTileAt (X + 1, Y);
+			if (tile_to_east != null && tile_to_east.Furniture != null && tile_to_east.Furniture.type == furn.type) 
+				tile_to_east.Furniture.neighbourChanged (this);
+			Tile tile_to_south = world.getTileAt (X, Y - 1);
+			if (tile_to_south != null && tile_to_south.Furniture != null && tile_to_south.Furniture.type == furn.type) 
+				tile_to_south.Furniture.neighbourChanged (this);
+			Tile tile_to_west = world.getTileAt (X - 1, Y);
+			if (tile_to_west != null && tile_to_west.Furniture != null && tile_to_west.Furniture.type == furn.type) 
+				tile_to_west.Furniture.neighbourChanged (this);
+		}
+
+		if (cbFurnitureInstalled != null)
+			cbFurnitureInstalled (this);
+	}
 	// inventory
 
 	public Tile (World world, int x, int y)
@@ -49,9 +72,9 @@ public class Tile  {
 		cbTileChanged += cb;
 	}
 
-	public void registerOnJobCompleteCallback(Action<Tile> cb)
+	public void registerOnFurnitureInstalled (Action<Tile> cb)
 	{
-		cbJobComplete += cb;
+		cbFurnitureInstalled += cb;
 	}
 
 	public override string ToString ()
@@ -61,7 +84,7 @@ public class Tile  {
 
 	public bool isInstalled ()
 	{
-		return installedFurniture != null;
+		return Furniture != null;
 	}
 
 	public bool hasJob ()
@@ -72,36 +95,6 @@ public class Tile  {
 	public void setJob (Job job)
 	{
 		this.job = job;
-		if (job.furniture != null)
-			job.registerOnCompleteCallback (installFurniture);
-	}
-
-	void installFurniture(Job job)
-	{
-		Tile tile = job.tile;
-		Furniture furn = job.furniture;
-		installedFurniture = job.furniture;
-		if (cbJobComplete != null)
-			cbJobComplete (tile);
-
-		// trigger onFurnitureChanged for the 4 neighbors if linked
-		if (job.furniture.linkedObject) {
-			// Linked object, we need to upgrade neighbours
-			Tile tile_to_north = world.getTileAt (X, Y + 1);
-			if (tile_to_north != null && tile_to_north.installedFurniture != null && tile_to_north.installedFurniture.type == furn.type) 
-				tile_to_north.installedFurniture.neighbourChanged (tile);
-			Tile tile_to_east = world.getTileAt (X + 1, Y);
-			if (tile_to_east != null && tile_to_east.installedFurniture != null && tile_to_east.installedFurniture.type == furn.type) 
-				tile_to_east.installedFurniture.neighbourChanged (tile);
-			Tile tile_to_south = world.getTileAt (X, Y - 1);
-			if (tile_to_south != null && tile_to_south.installedFurniture != null && tile_to_south.installedFurniture.type == furn.type) 
-				tile_to_south.installedFurniture.neighbourChanged (tile);
-			Tile tile_to_west = world.getTileAt (X - 1, Y);
-			if (tile_to_west != null && tile_to_west.installedFurniture != null && tile_to_west.installedFurniture.type == furn.type) 
-				tile_to_west.installedFurniture.neighbourChanged (tile);
-		}
-
-		tile.job = null; // remove the job
 	}
 
 	public bool isNeighbour(Tile tile)
