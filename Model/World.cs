@@ -29,6 +29,14 @@ public class World {
 		workers = new List<Worker> ();
 	}
 
+	public World (int width, int height)
+	{
+		tiles = new Tile[width, height];
+		createTiles (width, height);
+		tasks = new JobQueue ();
+		workers = new List<Worker> ();
+	}
+
 	public void createWorkerAt(int x, int y)
 	{
 		Worker w = new Worker (tiles [x,y]);
@@ -54,10 +62,10 @@ public class World {
 		return (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT);
 	}
 
-	void createTiles ()
+	void createTiles (int width = WIDTH, int height = HEIGHT)
 	{
-		for (int x = 0; x < WIDTH; x++) {
-			for (int y = 0; y < HEIGHT; y++) {
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
 				tiles [x, y] = new Tile (this, x, y);
 			}
 		}
