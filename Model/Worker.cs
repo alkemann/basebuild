@@ -34,34 +34,50 @@ public class Worker {
 	public void tick(float deltaTime)
 	{
 		if (isMoving()) {
-			float distToTravel = Mathf.Sqrt(Mathf.Pow(currentTile.X - destinationTile.X, 2) + Mathf.Pow(currentTile.Y - destinationTile.Y, 2));
-			float distThisFrame = walk_speed * deltaTime;
-			float percThisFrame = distThisFrame / distToTravel;
-			movementPercentage += percThisFrame;
-			if (movementPercentage >= 1) {
-				// reach destination
-				currentTile = destinationTile;
-				movementPercentage = 0;
-				if (cbStateChange != null)
-					cbStateChange (this);
-			}
+			moveWorker (deltaTime);
 		} else {
 			// Not moving, can do work or grab a new job
 			if (job == null) {
-				// doesnt have a job, look for one
-				Job new_job = currentTile.world.task();
-				if (new_job != null) {
-					setJob (new_job);
-				}
+				lookForJob ();
 			} else {
-				if (currentTile == job.tile) {
-					if (job.doWork (deltaTime * work_speed)) {
-						setJob (null);
-					}
-				} else {
-					setDestination(job.tile);
-				}
+				workForSomeTime (deltaTime);
 			}
+		}
+	}
+
+	void moveWorker (float deltaTime)
+	{
+		float distToTravel = Mathf.Sqrt (Mathf.Pow (currentTile.X - destinationTile.X, 2) + Mathf.Pow (currentTile.Y - destinationTile.Y, 2));
+		float distThisFrame = walk_speed * deltaTime;
+		float percThisFrame = distThisFrame / distToTravel;
+		movementPercentage += percThisFrame;
+		if (movementPercentage >= 1) {
+			// reach destination
+			currentTile = destinationTile;
+			movementPercentage = 0;
+			if (cbStateChange != null)
+				cbStateChange (this);
+		}
+	}
+
+	void lookForJob ()
+	{
+		// doesnt have a job, look for one
+		Job new_job = currentTile.world.getNearestJob(currentTile.X, currentTile.Y);
+		if (new_job != null) {
+			setJob (new_job);
+		}
+	}
+
+	void workForSomeTime (float deltaTime)
+	{
+		if (currentTile == job.tile) {
+			if (job.doWork (deltaTime * work_speed)) {
+				setJob (null);
+			}
+		}
+		else {
+			setDestination (job.tile);
 		}
 	}
 

@@ -57,6 +57,7 @@ public class Tile  {
 		if (cbFurnitureInstalled != null)
 			cbFurnitureInstalled (this);
 	}
+
 	// inventory
 
 	public Tile (World world, int x, int y)

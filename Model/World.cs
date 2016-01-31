@@ -8,11 +8,11 @@ public class World {
 	public const int WIDTH = 100;
 	public const int HEIGHT = 100;
 
-	JobQueue tasks;
+	JobQueue jobs;
 
-	public Job task ()
+	public Job getNearestJob (int x, int y)
 	{
-		return tasks.Dequeue ();
+		return jobs.getNearestJob (x, y);
 	}
 
 	List<Worker> workers;
@@ -25,7 +25,7 @@ public class World {
 	{
 		tiles = new Tile[WIDTH, HEIGHT];
 		createTiles ();
-		tasks = new JobQueue ();
+		jobs = new JobQueue ();
 		workers = new List<Worker> ();
 	}
 
@@ -33,7 +33,7 @@ public class World {
 	{
 		tiles = new Tile[width, height];
 		createTiles (width, height);
-		tasks = new JobQueue ();
+		jobs = new JobQueue ();
 		workers = new List<Worker> ();
 	}
 
@@ -105,7 +105,7 @@ public class World {
 
 		// TODO: Furniture Prototype to grab data like work cost?
 		Job job = new Job(tile, 2f, Job.TYPE.INSTALL);
-		tasks.Enqueue (job);
+		jobs.Add (job);
 		job.registerOnCompleteCallback ((j) => {
 			Tile job_tile = j.tile;
 			job_tile.installFurniture(new Furniture (job_tile, type));
@@ -122,7 +122,7 @@ public class World {
 		if (tile.hasJob ())
 			return null;
 		Job job = new Job (tile, 0.01f, Job.TYPE.MOVE);
-		tasks.Enqueue (job);
+		jobs.Add (job);
 		if (cbJobCreated != null)
 			cbJobCreated (job);
 		return job;
