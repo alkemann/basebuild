@@ -11,9 +11,10 @@ public class Job {
 
 	Action<Job> cbOnComplete;
 
-	public Job (Tile tile, Furniture furn)
+	public Job (Tile tile, Furniture furn = null, float work = 2f)
 	{
 		this.tile = tile;
+		this.work = work;
 		this.furniture = furn;
 		tile.setJob (this);
 	}

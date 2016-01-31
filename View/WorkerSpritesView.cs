@@ -15,6 +15,8 @@ public class WorkerSpritesView : MonoBehaviour {
 	{
 		workerToGameObjectMap = new Dictionary<Worker, GameObject> ();
 		GetComponent<WorldController> ().world.registerOnWorkerCreated (onWorkerCreated);
+		GetComponent<WorldController> ().world.createWorkerAt (World.WIDTH / 2, World.HEIGHT / 2); // FIXME for test purposes
+
 	}
 
 	public void Update()

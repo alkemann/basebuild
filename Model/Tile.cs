@@ -72,7 +72,8 @@ public class Tile  {
 	public void setJob (Job job)
 	{
 		this.job = job;
-		job.registerOnCompleteCallback (installFurniture);
+		if (job.furniture != null)
+			job.registerOnCompleteCallback (installFurniture);
 	}
 
 	void installFurniture(Job job)

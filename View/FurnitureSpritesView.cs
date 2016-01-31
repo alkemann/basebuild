@@ -16,7 +16,7 @@ public class FurnitureSpritesView : MonoBehaviour
 		spriteMap = new Dictionary<string, Sprite> ();
 		furnitureToGameObjectMap = new Dictionary<Furniture, GameObject> ();
 		jobToGameObjectMap = new Dictionary<Job, GameObject> ();
-
+		WorldController.Instance.world.registOnJobCreated (jobCreated);
 		loadFurnituresSprites ();
 	}
 
@@ -40,19 +40,21 @@ public class FurnitureSpritesView : MonoBehaviour
 		job_go.AddComponent<SpriteRenderer> ().sprite = job_placeholder_sprite;
 		job.registerOnCompleteCallback(onJobComplete);
 		jobToGameObjectMap [job] = job_go;
-		tile.registerOnJobCompleteCallback ((t) => {
-			Furniture furn = job.furniture;
-			GameObject furn_go = new GameObject ();
-			furn_go.name = "Furn_" + x + "_" + y;
-			furn_go.transform.position = new Vector3 (x, y, -1f);
-			furn_go.transform.SetParent (furnitures_parent.transform, true);
-			furn_go.AddComponent<SpriteRenderer> ();
-			furnitureToGameObjectMap [furn] = furn_go;
+		if (job.furniture != null) {
+			tile.registerOnJobCompleteCallback ((t) => {
+				Furniture furn = job.furniture;
+				GameObject furn_go = new GameObject ();
+				furn_go.name = "Furn_" + x + "_" + y;
+				furn_go.transform.position = new Vector3 (x, y, -1f);
+				furn_go.transform.SetParent (furnitures_parent.transform, true);
+				furn_go.AddComponent<SpriteRenderer> ();
+				furnitureToGameObjectMap [furn] = furn_go;
 
-			furn.registerOnChangeCallback(onFurnitureChanged);
-			onFurnitureChanged(furn); // call it once to do the first sprite set
+				furn.registerOnChangeCallback (onFurnitureChanged);
+				onFurnitureChanged (furn); // call it once to do the first sprite set
 
-		});
+			});
+		}
 	}
 
 	public void onJobComplete(Job job)

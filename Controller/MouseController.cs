@@ -57,7 +57,6 @@ public class MouseController : MonoBehaviour
 			return;
 		}
 
-
 		// quick grab coordinate of a tile
 		if (Input.GetMouseButtonDown (4)) {
 			Debug.Log (string.Format ("Starts at {0},{1}", Mathf.FloorToInt (currFramePosition.x), Mathf.FloorToInt (currFramePosition.y)));
@@ -97,27 +96,42 @@ public class MouseController : MonoBehaviour
 
 				// End drag;
 				if (Input.GetMouseButtonUp (0)) {
-					if (WorldController.Instance.buildMode != Tile.TYPE.NONE) {
-						GetComponent<WorldController> ().buildTile (WorldController.Instance.buildMode, x, y);
-					}
-					if (WorldController.Instance.creatingFurniture != Furniture.TYPE.NONE) {
-						Job job = GetComponent<WorldController> ().createInstallJobAt (Furniture.TYPE.WALL, x, y);
-						if (job != null) {
-							FurnitureSpritesView fsc = GetComponent<FurnitureSpritesView> ();
-							fsc.jobCreated (job);
-						}
-					}
-				} else
-					// Dragging
-					if (Input.GetMouseButton (0) && !Input.GetMouseButtonDown (0)) {
-					// Display a preview of drag area
-					GameObject go = SimplePool.Spawn (cursor_prefab, new Vector3 (x, y, 0), Quaternion.identity);
-					go.transform.SetParent (preview_parent.transform, true);
-					dragPreviewObjects.Add (go);
+					interactWithTileAt (x, y);
+				}
+				// Dragging
+				else if (Input.GetMouseButton (0) && !Input.GetMouseButtonDown (0)) {
+					previewAt (x, y);
 				}
 			}
 		}
 	}
 
+	void interactWithTileAt (int x, int y)
+	{
+		switch (WorldController.Instance.activity) {
+		case MenuController.COMMANDS.NONE:
+			break;
+		case MenuController.COMMANDS.BULLDOZE:
+			// TODO: Bulldoze should come with checks and costs
+			WorldController.Instance.buildTile (Tile.TYPE.EMPTY, x, y);
+			break;
+		case MenuController.COMMANDS.CONSTRUCT_TILE:
+			WorldController.Instance.buildTile (WorldController.Instance.constructTileType, x, y);
+			break;
+		case MenuController.COMMANDS.BUILD_FURNITURE:
+			WorldController.Instance.world.createInstallJobAt (Furniture.TYPE.WALL, x, y);
+			break;
+		case MenuController.COMMANDS.MOVE:
+			WorldController.Instance.world.createMoveJobAt (x, y);
+			break;
+		}
+	}
 
+	// Display a preview of drag area
+	void previewAt (int x, int y)
+	{
+		GameObject go = SimplePool.Spawn (cursor_prefab, new Vector3 (x, y, 0), Quaternion.identity);
+		go.transform.SetParent (preview_parent.transform, true);
+		dragPreviewObjects.Add (go);
+	}
 }

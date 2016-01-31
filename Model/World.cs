@@ -110,6 +110,18 @@ public class World {
 		return job;
 	}
 
+	public Job createMoveJobAt (int x, int y)
+	{
+		Tile tile = tiles [x, y];
+		if (tile.hasJob ())
+			return null;
+		Job job = new Job (tile, null, 0.01f);
+		tasks.Enqueue (job);
+		if (cbJobCreated != null)
+			cbJobCreated (job);
+		return job;
+	}
+
 	public void registOnJobCreated(Action<Job> cb)
 	{
 		cbJobCreated += cb;
