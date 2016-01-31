@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 
 public class Furniture {
-	public enum TYPE { NONE, WALL, DOOR };
+	public enum TYPE { NONE, WALL, DOOR, TERMINAL };
 
 	public TYPE type { get; protected set; }
 
@@ -18,7 +18,11 @@ public class Furniture {
 	{
 		this.tile = tile;
 		this.type = type;
-		this.linkedObject = true;
+		if (type == TYPE.WALL || type == TYPE.DOOR) {
+			this.linkedObject = true;
+		} else {
+			this.linkedObject = false;
+		}
 	}
 
 	public void registerOnChangeCallback (Action<Furniture> cb)

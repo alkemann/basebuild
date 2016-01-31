@@ -63,6 +63,8 @@ public class MenuController : MonoBehaviour {
 			return Furniture.TYPE.DOOR;
 		case "wall":
 			return Furniture.TYPE.WALL;
+		case "terminal":
+			return Furniture.TYPE.TERMINAL;
 		}
 		throw new UnityException ("No such type: " + type_string);
 	}

@@ -114,6 +114,9 @@ public class FurnitureSpritesView : MonoBehaviour
 			}
 			sprite_name += "_CLOSED";
 			break;
+		case Furniture.TYPE.TERMINAL:
+			sprite_name = "TERMINAL";
+			break;
 		}
 		if (spriteMap.ContainsKey(sprite_name)) {
 			return spriteMap[sprite_name];
