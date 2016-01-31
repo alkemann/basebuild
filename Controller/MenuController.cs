@@ -73,4 +73,9 @@ public class MenuController : MonoBehaviour {
 	{
 		WorldController.Instance.world.createWorkerAt (World.WIDTH / 2, World.HEIGHT / 2);
 	}
+
+	public void togglePlayPayse()
+	{
+		WorldController.Instance.world.pause = !WorldController.Instance.world.pause;
+	}
 }

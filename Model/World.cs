@@ -17,6 +17,8 @@ public class World {
 
 	List<Worker> workers;
 
+	public bool pause;
+
 	Action<Worker> cbWorkerCreated;
 	Action<Tile> cbTileChanged;
 	Action<Job> cbJobCreated;
@@ -47,6 +49,8 @@ public class World {
 
 	public void tick (float deltaTime)
 	{
+		if (pause)
+			return;
 		foreach(Worker w in getWorkers()) {
 			w.tick (Time.deltaTime);
 		}
