@@ -31,6 +31,38 @@ public class Tile  {
 	public Job job { get; protected set; }
 	public Furniture Furniture  {get; private set;}
 
+	public bool isValidInstallation (Furniture.TYPE furniture_type)
+	{
+		if (hasJob () || isInstalled() || this.type == Tile.TYPE.EMPTY) {
+			return false;
+		}
+		if (furniture_type == Furniture.TYPE.DOOR) {
+			Tile tile_to_north = world.getTileAt (X, Y + 1);
+			Tile tile_to_east = world.getTileAt (X + 1, Y);
+			Tile tile_to_south = world.getTileAt (X, Y - 1);
+			Tile tile_to_west = world.getTileAt (X - 1, Y);
+			if (tile_to_north != null && tile_to_north.hasWall () && tile_to_south.hasWall ()) {
+				// has walls north/south
+			} else if (tile_to_east != null && tile_to_east.hasWall () && tile_to_west.hasWall ()) {
+				// has walls east/west
+			} else {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public bool hasWall()
+	{
+		return this.Furniture != null && this.Furniture.type == Furniture.TYPE.WALL;
+	}
+
+	public bool hasLinkedInstallation()
+	{
+		return this.Furniture != null && this.Furniture.linkedObject;
+	}
+
 	public void installFurniture (Furniture furn)
 	{
 		if (this.Furniture != null) {
@@ -41,16 +73,16 @@ public class Tile  {
 		if (furn.linkedObject) {
 			// Linked object, we need to upgrade neighbours
 			Tile tile_to_north = world.getTileAt (X, Y + 1);
-			if (tile_to_north != null && tile_to_north.Furniture != null && tile_to_north.Furniture.linkedObject)
+			if (tile_to_north != null && tile_to_north.hasLinkedInstallation())
 				tile_to_north.Furniture.neighbourChanged (this);
 			Tile tile_to_east = world.getTileAt (X + 1, Y);
-			if (tile_to_east != null && tile_to_east.Furniture != null && tile_to_east.Furniture.linkedObject)
+			if (tile_to_east != null && tile_to_east.hasLinkedInstallation())
 				tile_to_east.Furniture.neighbourChanged (this);
 			Tile tile_to_south = world.getTileAt (X, Y - 1);
-			if (tile_to_south != null && tile_to_south.Furniture != null && tile_to_south.Furniture.linkedObject)
+			if (tile_to_south != null && tile_to_south.hasLinkedInstallation())
 				tile_to_south.Furniture.neighbourChanged (this);
 			Tile tile_to_west = world.getTileAt (X - 1, Y);
-			if (tile_to_west != null && tile_to_west.Furniture != null && tile_to_west.Furniture.linkedObject)
+			if (tile_to_west != null && tile_to_west.hasLinkedInstallation())
 				tile_to_west.Furniture.neighbourChanged (this);
 		}
 

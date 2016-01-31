@@ -88,26 +88,26 @@ public class FurnitureSpritesView : MonoBehaviour
 		case Furniture.TYPE.WALL:
 			sprite_name = "WALL_";
 			Tile tile_to_north = wc.getTileAt (x, y + 1);
-			if (tile_to_north != null && tile_to_north.Furniture != null && tile_to_north.Furniture.linkedObject) {
+			if (tile_to_north != null && tile_to_north.hasLinkedInstallation()) {
 				sprite_name += "N";
 			}
 			Tile tile_to_east = wc.getTileAt (x + 1, y);
-			if (tile_to_east != null && tile_to_east.Furniture != null && tile_to_east.Furniture.linkedObject) {
+			if (tile_to_east != null && tile_to_east.hasLinkedInstallation()) {
 				sprite_name += "E";
 			}
 			Tile tile_to_south = wc.getTileAt (x, y - 1);
-			if (tile_to_south != null && tile_to_south.Furniture != null && tile_to_south.Furniture.linkedObject) {
+			if (tile_to_south != null && tile_to_south.hasLinkedInstallation()) {
 				sprite_name += "S";
 			}
 			Tile tile_to_west = wc.getTileAt (x - 1, y);
-			if (tile_to_west != null && tile_to_west.Furniture != null && tile_to_west.Furniture.linkedObject) {
+			if (tile_to_west != null && tile_to_west.hasLinkedInstallation()) {
 				sprite_name += "W";
 			}
 			break;
 		case Furniture.TYPE.DOOR:
 			sprite_name = "DOOR_";
 			tile_to_north = wc.getTileAt (x, y + 1);
-			if (tile_to_north != null && tile_to_north.Furniture != null && tile_to_north.Furniture.linkedObject) {
+			if (tile_to_north != null && tile_to_north.hasLinkedInstallation()) {
 				sprite_name += "V";
 			} else {
 				sprite_name += "H";

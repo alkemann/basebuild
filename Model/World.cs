@@ -100,7 +100,7 @@ public class World {
 	public Job createInstallJobAt (Furniture.TYPE type, int x, int y)
 	{
 		Tile tile = tiles [x, y];
-		if (tile.hasJob () || tile.isInstalled() || tile.type == Tile.TYPE.EMPTY)
+		if (tile.isValidInstallation(type) == false)
 			return null;
 
 		// TODO: Furniture Prototype to grab data like work cost?
