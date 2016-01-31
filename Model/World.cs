@@ -39,7 +39,7 @@ public class World {
 
 	public void createWorkerAt(int x, int y)
 	{
-		Worker w = new Worker (tiles [x,y], UnityEngine.Random.Range(2.5, 7.5), UnityEngine.Random.Range(0.5, 5));
+		Worker w = new Worker (tiles [x,y], UnityEngine.Random.Range(2.5f, 7.5f), UnityEngine.Random.Range(0.5f, 5f));
 		workers.Add (w);
 		if (cbWorkerCreated != null)
 			cbWorkerCreated (w);

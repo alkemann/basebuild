@@ -41,16 +41,16 @@ public class Tile  {
 		if (furn.linkedObject) {
 			// Linked object, we need to upgrade neighbours
 			Tile tile_to_north = world.getTileAt (X, Y + 1);
-			if (tile_to_north != null && tile_to_north.Furniture != null && tile_to_north.Furniture.type == furn.type) 
+			if (tile_to_north != null && tile_to_north.Furniture != null && tile_to_north.Furniture.linkedObject)
 				tile_to_north.Furniture.neighbourChanged (this);
 			Tile tile_to_east = world.getTileAt (X + 1, Y);
-			if (tile_to_east != null && tile_to_east.Furniture != null && tile_to_east.Furniture.type == furn.type) 
+			if (tile_to_east != null && tile_to_east.Furniture != null && tile_to_east.Furniture.linkedObject)
 				tile_to_east.Furniture.neighbourChanged (this);
 			Tile tile_to_south = world.getTileAt (X, Y - 1);
-			if (tile_to_south != null && tile_to_south.Furniture != null && tile_to_south.Furniture.type == furn.type) 
+			if (tile_to_south != null && tile_to_south.Furniture != null && tile_to_south.Furniture.linkedObject)
 				tile_to_south.Furniture.neighbourChanged (this);
 			Tile tile_to_west = world.getTileAt (X - 1, Y);
-			if (tile_to_west != null && tile_to_west.Furniture != null && tile_to_west.Furniture.type == furn.type) 
+			if (tile_to_west != null && tile_to_west.Furniture != null && tile_to_west.Furniture.linkedObject)
 				tile_to_west.Furniture.neighbourChanged (this);
 		}
 

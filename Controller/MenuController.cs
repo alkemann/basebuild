@@ -58,7 +58,13 @@ public class MenuController : MonoBehaviour {
 
 	private Furniture.TYPE getFurnitureTipeFromString (string type_string)
 	{
-		return Furniture.TYPE.WALL;
+		switch (type_string) {
+		case "door":
+			return Furniture.TYPE.DOOR;
+		case "wall":
+			return Furniture.TYPE.WALL;
+		}
+		throw new UnityException ("No such type: " + type_string);
 	}
 
 	public void addWorker()

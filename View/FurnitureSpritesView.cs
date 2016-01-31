@@ -79,32 +79,46 @@ public class FurnitureSpritesView : MonoBehaviour
 
 	Sprite getSpriteForFurniture (Furniture furn)
 	{
-		// FIXME This can only set wall sprite
+		WorldController wc = WorldController.Instance;
+		Tile tile = furn.tile;
+		int x = tile.X;
+		int y = tile.Y;
 		string sprite_name = "default";
-		if (furn.linkedObject) {
-			WorldController wc = GetComponent<WorldController> ();
-			Tile tile = furn.tile;
-			int x = tile.X;
-			int y = tile.Y;
-			sprite_name = "walls_";
+		switch (furn.type) {
+		case Furniture.TYPE.WALL:
+			sprite_name = "WALL_";
 			Tile tile_to_north = wc.getTileAt (x, y + 1);
-			if (tile_to_north != null && tile_to_north.Furniture != null && tile_to_north.Furniture.type == furn.type) {
+			if (tile_to_north != null && tile_to_north.Furniture != null && tile_to_north.Furniture.linkedObject) {
 				sprite_name += "N";
 			}
 			Tile tile_to_east = wc.getTileAt (x + 1, y);
-			if (tile_to_east != null && tile_to_east.Furniture != null && tile_to_east.Furniture.type == furn.type) {
+			if (tile_to_east != null && tile_to_east.Furniture != null && tile_to_east.Furniture.linkedObject) {
 				sprite_name += "E";
 			}
 			Tile tile_to_south = wc.getTileAt (x, y - 1);
-			if (tile_to_south != null && tile_to_south.Furniture != null && tile_to_south.Furniture.type == furn.type) {
+			if (tile_to_south != null && tile_to_south.Furniture != null && tile_to_south.Furniture.linkedObject) {
 				sprite_name += "S";
 			}
 			Tile tile_to_west = wc.getTileAt (x - 1, y);
-			if (tile_to_west != null && tile_to_west.Furniture != null && tile_to_west.Furniture.type == furn.type) {
+			if (tile_to_west != null && tile_to_west.Furniture != null && tile_to_west.Furniture.linkedObject) {
 				sprite_name += "W";
 			}
+			break;
+		case Furniture.TYPE.DOOR:
+			sprite_name = "DOOR_";
+			tile_to_north = wc.getTileAt (x, y + 1);
+			if (tile_to_north != null && tile_to_north.Furniture != null && tile_to_north.Furniture.linkedObject) {
+				sprite_name += "V";
+			} else {
+				sprite_name += "H";
+			}
+			sprite_name += "_CLOSED";
+			break;
 		}
-		return spriteMap[sprite_name];
+		if (spriteMap.ContainsKey(sprite_name)) {
+			return spriteMap[sprite_name];
+		}
+		throw new Exception ("Unknown sprite: " + sprite_name);
 	}
 }
 

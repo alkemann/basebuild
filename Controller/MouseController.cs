@@ -119,7 +119,7 @@ public class MouseController : MonoBehaviour
 			WorldController.Instance.buildTile (WorldController.Instance.constructTileType, x, y);
 			break;
 		case MenuController.COMMANDS.BUILD_FURNITURE:
-			WorldController.Instance.world.createInstallJobAt (Furniture.TYPE.WALL, x, y);
+			WorldController.Instance.world.createInstallJobAt (WorldController.Instance.installFurnitureType, x, y);
 			break;
 		case MenuController.COMMANDS.MOVE:
 			WorldController.Instance.world.createMoveJobAt (x, y);
