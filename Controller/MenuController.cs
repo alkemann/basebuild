@@ -47,7 +47,7 @@ public class MenuController : MonoBehaviour {
 		WorldController.Instance.installFurnitureType = getFurnitureTipeFromString (type_string);
 	}
 
-	Tile.TYPE getTypeFromString (string type_string)
+	private Tile.TYPE getTypeFromString (string type_string)
 	{
 		switch (type_string) {
 		case "floor":
@@ -56,8 +56,13 @@ public class MenuController : MonoBehaviour {
 		throw new UnityException ("No such type: " + type_string);
 	}
 
-	Furniture.TYPE getFurnitureTipeFromString (string type_string)
+	private Furniture.TYPE getFurnitureTipeFromString (string type_string)
 	{
 		return Furniture.TYPE.WALL;
+	}
+
+	public void addWorker()
+	{
+		WorldController.Instance.world.createWorkerAt (World.WIDTH / 2, World.HEIGHT / 2);
 	}
 }

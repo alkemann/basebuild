@@ -125,6 +125,9 @@ public class World {
 		jobs.Add (job);
 		if (cbJobCreated != null)
 			cbJobCreated (job);
+		job.registerOnCompleteCallback ((j) => {
+			tile.setJob(null); // remove the job from tile
+		});
 		return job;
 	}
 

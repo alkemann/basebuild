@@ -19,16 +19,18 @@ public class Worker {
 	Tile destinationTile;
 	float movementPercentage;
 
-	float walk_speed = 5f;
-	float work_speed = 5f;
+	float walk_speed;
+	float work_speed;
 
 	Job job;
 
 	Action<Worker> cbStateChange;
 
-	public Worker(Tile tile)
+	public Worker(Tile tile, float walk = 5f, float work = 5f)
 	{
 		currentTile = destinationTile = tile;
+		this.walk_speed = walk;
+		this.work_speed = work;
 	}
 
 	public void tick(float deltaTime)
