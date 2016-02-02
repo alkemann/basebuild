@@ -4,11 +4,12 @@ using System;
 
 public class World {
 
-	Tile[,] tiles;
-
 	public int Width { get; protected set; }
 	public int Height { get; protected set; }
-	JobQueue jobs;
+
+	public Tile[,] tiles;
+	public JobQueue jobs;
+	public bool pause;
 
 	public Job getNearestJob (int x, int y)
 	{
@@ -16,8 +17,6 @@ public class World {
 	}
 
 	List<Worker> workers;
-
-	public bool pause;
 
 	Action<Worker> cbWorkerCreated;
 	Action<Tile> cbTileChanged;
@@ -108,7 +107,7 @@ public class World {
 	public Job createInstallJobAt (Furniture.TYPE type, int x, int y)
 	{
 		Tile tile = tiles [x, y];
-		if (tile.isValidInstallation(type) == false)
+		if (tile.isValidInstallation(type) == false || tile.isPassable() == false)
 			return null;
 
 		// TODO: Furniture Prototype to grab data like work cost?
@@ -127,7 +126,7 @@ public class World {
 	public Job createMoveJobAt (int x, int y)
 	{
 		Tile tile = tiles [x, y];
-		if (tile.hasJob ())
+		if (tile.hasJob () || tile.isPassable() == false)
 			return null;
 		Job job = new Job (tile, 0.01f, Job.TYPE.MOVE);
 		jobs.Add (job);

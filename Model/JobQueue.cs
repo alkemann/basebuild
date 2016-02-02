@@ -10,6 +10,11 @@ public class JobQueue {
 		jobQueue = new List<Job> (20);
 	}
 
+	public int count ()
+	{
+		return jobQueue.Count;
+	}
+
 	public bool Add(Job job)
 	{
 		jobQueue.Add(job);

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class Tile  {
@@ -97,7 +97,58 @@ public class Tile  {
 		this.world = world;
 		this.X = x;
 		this.Y = y;
-		this.tileType = TYPE.EMPTY;
+		this.tileType = TYPE.FLOOR;
+	}
+
+	public List<Tile> getConnected ()
+	{
+		List<Tile> ret = new List<Tile>();
+
+		if (X > 0 && Y > 0)
+			ret.Add(world.getTileAt(X-1, Y-1));
+		if (Y > 0)
+			ret.Add(world.getTileAt(X,   Y-1));
+		if (X < world.Width-1 && Y > 0)
+			ret.Add(world.getTileAt(X+1, Y-1));
+
+		if (X > 0)
+			ret.Add(world.getTileAt(X-1, Y));
+		if (X < world.Width-1)
+			ret.Add(world.getTileAt(X+1, Y));
+
+		if (X > 0 && Y < world.Height-1)
+			ret.Add(world.getTileAt(X-1, Y+1));
+		if (Y < world.Height-1)
+			ret.Add(world.getTileAt(X,   Y+1));
+		if (X < world.Width-1 && Y < world.Height-1)
+			ret.Add(world.getTileAt(X+1, Y+1));
+
+		return ret;
+	}
+
+	public bool isPassable()
+	{
+		if (this.Furniture != null && this.Furniture.type == Furniture.TYPE.WALL)
+			return false;
+		return true;
+	}
+
+	public float distanceTo (Tile neighbor)
+	{
+		if (neighbor.X != X && neighbor.Y != Y) // diagonally
+			return 1.001f;
+		else
+			return 1; // TODO: better movement cost
+	}
+
+	public float costToEnterFrom (int x, int y)
+	{
+		if (this.Furniture != null && this.Furniture.type == Furniture.TYPE.WALL) {
+			return Mathf.Infinity;
+		} else if (x != X && y != Y) // diagonally
+			return 1.001f;
+		else
+			return 1; // TODO: better movement cost
 	}
 
 	public void registerOnChangeCallback(Action<Tile> cb)

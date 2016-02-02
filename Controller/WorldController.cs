@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class WorldController : MonoBehaviour {
 
@@ -21,6 +22,7 @@ public class WorldController : MonoBehaviour {
 	void OnEnable()
 	{
 		world = new World (WIDTH, HEIGHT);
+		Camera.main.transform.position = new Vector3 (WIDTH / 2, HEIGHT / 2, Camera.main.transform.position.z);
 	}
 
 	void Start ()
@@ -31,6 +33,13 @@ public class WorldController : MonoBehaviour {
 	public void Update()
 	{
 		world.tick (Time.deltaTime);
+	}
+
+	public GameObject jobsCounter;
+
+	public void FixedUpdate()
+	{
+		jobsCounter.GetComponent<Text> ().text = ""+world.jobs.count ();
 	}
 
 	public Tile getTileAt(int x, int y)

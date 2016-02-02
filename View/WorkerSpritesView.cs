@@ -35,6 +35,7 @@ public class WorkerSpritesView : MonoBehaviour {
 	void onWorkerCreated(Worker worker)
 	{
 		GameObject go = Instantiate (char_prefab);
+		go.transform.position =  new Vector3 (worker.X, worker.Y, -1);
 		go.transform.SetParent (character_parent.transform);
 		workerToGameObjectMap [worker] = go;
 
