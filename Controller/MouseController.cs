@@ -91,7 +91,7 @@ public class MouseController : MonoBehaviour
 
 		for (int x = start_x; x <= end_x; x++) {
 			for (int y = start_y; y <= end_y; y++) {
-				if (World.isCoordinatesWithinBuildWorld(x, y) == false)
+				if (WorldController.Instance.world.isCoordinatesWithinBuildWorld(x, y) == false)
 					continue; // no tile here, out of map
 
 				// End drag;

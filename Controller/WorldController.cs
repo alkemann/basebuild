@@ -9,6 +9,9 @@ public class WorldController : MonoBehaviour {
 	public Tile.TYPE constructTileType = Tile.TYPE.FLOOR;
 	public Furniture.TYPE installFurnitureType = Furniture.TYPE.NONE;
 
+	public int HEIGHT;
+	public int WIDTH;
+
 	public WorldController ()
 	{
 		if (Instance == null)
@@ -17,7 +20,7 @@ public class WorldController : MonoBehaviour {
 
 	void OnEnable()
 	{
-		world = new World ();
+		world = new World (WIDTH, HEIGHT);
 	}
 
 	void Start ()

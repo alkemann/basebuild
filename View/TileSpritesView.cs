@@ -18,8 +18,8 @@ public class TileSpritesView : MonoBehaviour {
 
 	public void renderTiles (World world)
 	{
-		for (int x = 0; x < World.WIDTH; x++) {
-			for (int y = 0; y < World.HEIGHT; y++) {
+		for (int x = 0; x < WorldController.Instance.world.Width; x++) {
+			for (int y = 0; y < WorldController.Instance.world.Height; y++) {
 				createTileSprite (world, x, y);
 			}
 		}

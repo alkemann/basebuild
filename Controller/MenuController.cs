@@ -71,7 +71,7 @@ public class MenuController : MonoBehaviour {
 
 	public void addWorker()
 	{
-		WorldController.Instance.world.createWorkerAt (World.WIDTH / 2, World.HEIGHT / 2);
+		WorldController.Instance.world.createWorkerAt (WorldController.Instance.world.Width / 2, WorldController.Instance.world.Height / 2);
 	}
 
 	public void togglePlayPayse()

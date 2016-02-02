@@ -5,9 +5,9 @@ using System;
 public class World {
 
 	Tile[,] tiles;
-	public const int WIDTH = 100;
-	public const int HEIGHT = 100;
 
+	public int Width { get; protected set; }
+	public int Height { get; protected set; }
 	JobQueue jobs;
 
 	public Job getNearestJob (int x, int y)
@@ -25,14 +25,18 @@ public class World {
 
 	public World()
 	{
-		tiles = new Tile[WIDTH, HEIGHT];
-		createTiles ();
+		this.Width = 100;
+		this.Height = 100;
+		tiles = new Tile[Width, Height];
+		createTiles (this.Width, this.Height);
 		jobs = new JobQueue ();
 		workers = new List<Worker> ();
 	}
 
 	public World (int width, int height)
 	{
+		this.Width = width;
+		this.Height = height;
 		tiles = new Tile[width, height];
 		createTiles (width, height);
 		jobs = new JobQueue ();
@@ -41,7 +45,7 @@ public class World {
 
 	public void createWorkerAt(int x, int y)
 	{
-		Worker w = new Worker (tiles [x,y], UnityEngine.Random.Range(2.5f, 7.5f), UnityEngine.Random.Range(0.5f, 5f));
+		Worker w = new Worker (tiles [x, y], UnityEngine.Random.Range(4.5f, 7.5f), UnityEngine.Random.Range(0.5f, 5f));
 		workers.Add (w);
 		if (cbWorkerCreated != null)
 			cbWorkerCreated (w);
@@ -61,12 +65,12 @@ public class World {
 		return workers;
 	}
 
-	public static bool isCoordinatesWithinBuildWorld (int x, int y)
+	public bool isCoordinatesWithinBuildWorld (int x, int y)
 	{
-		return (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT);
+		return (x >= 0 && x < Width && y >= 0 && y < Height);
 	}
 
-	void createTiles (int width = WIDTH, int height = HEIGHT)
+	void createTiles (int width, int height)
 	{
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
@@ -77,10 +81,10 @@ public class World {
 
 	public Tile getTileAt(int x, int y)
 	{
-		if (x < 0 || x >= WIDTH) {
+		if (x < 0 || x >= Width) {
 			return null;
 			// throw new Exception ("x is out of map scope");
-		} else if (y < 0 || y >= HEIGHT) {
+		} else if (y < 0 || y >= Height) {
 			return null;
 			// throw new Exception ("y is out of map scope");
 		}
