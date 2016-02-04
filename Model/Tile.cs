@@ -31,6 +31,16 @@ public class Tile  {
 	public Job job { get; protected set; }
 	public Furniture Furniture  {get; private set;}
 
+	// inventory
+
+	public Tile (World world, int x, int y)
+	{
+		this.world = world;
+		this.X = x;
+		this.Y = y;
+		this.tileType = TYPE.EMPTY;
+	}
+
 	public bool isValidInstallation (Furniture.TYPE furniture_type)
 	{
 		if (hasJob () || isInstalled() || this.type == Tile.TYPE.EMPTY) {
@@ -90,40 +100,31 @@ public class Tile  {
 			cbFurnitureInstalled (this);
 	}
 
-	// inventory
-
-	public Tile (World world, int x, int y)
-	{
-		this.world = world;
-		this.X = x;
-		this.Y = y;
-		this.tileType = TYPE.FLOOR;
-	}
-
 	public List<Tile> getConnected ()
 	{
-		List<Tile> ret = new List<Tile>();
+		List<Tile> connectedTiles = new List<Tile>();
 
 		if (X > 0 && Y > 0)
-			ret.Add(world.getTileAt(X-1, Y-1));
+			connectedTiles.Add(world.getTileAt(X-1, Y-1));
 		if (Y > 0)
-			ret.Add(world.getTileAt(X,   Y-1));
+			connectedTiles.Add(world.getTileAt(X,   Y-1));
 		if (X < world.Width-1 && Y > 0)
-			ret.Add(world.getTileAt(X+1, Y-1));
+			connectedTiles.Add(world.getTileAt(X+1, Y-1));
 
 		if (X > 0)
-			ret.Add(world.getTileAt(X-1, Y));
+			connectedTiles.Add(world.getTileAt(X-1, Y));
 		if (X < world.Width-1)
-			ret.Add(world.getTileAt(X+1, Y));
+			connectedTiles.Add(world.getTileAt(X+1, Y));
 
 		if (X > 0 && Y < world.Height-1)
-			ret.Add(world.getTileAt(X-1, Y+1));
+			connectedTiles.Add(world.getTileAt(X-1, Y+1));
 		if (Y < world.Height-1)
-			ret.Add(world.getTileAt(X,   Y+1));
+			connectedTiles.Add(world.getTileAt(X,   Y+1));
 		if (X < world.Width-1 && Y < world.Height-1)
-			ret.Add(world.getTileAt(X+1, Y+1));
+			connectedTiles.Add(world.getTileAt(X+1, Y+1));
 
-		return ret;
+
+		return connectedTiles;
 	}
 
 	public bool isPassable()

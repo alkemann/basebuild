@@ -7,9 +7,12 @@ public class World {
 	public int Width { get; protected set; }
 	public int Height { get; protected set; }
 
-	public Tile[,] tiles;
+	Tile[,] tiles;
+
 	public JobQueue jobs;
 	public bool pause;
+
+	public Pathfinder Pathfinder { get; protected set; }
 
 	public Job getNearestJob (int x, int y)
 	{
@@ -22,20 +25,13 @@ public class World {
 	Action<Tile> cbTileChanged;
 	Action<Job> cbJobCreated;
 
-	public World()
-	{
-		this.Width = 100;
-		this.Height = 100;
-		tiles = new Tile[Width, Height];
-		createTiles (this.Width, this.Height);
-		jobs = new JobQueue ();
-		workers = new List<Worker> ();
-	}
-
-	public World (int width, int height)
+	public World (int width = 100, int height = 100)
 	{
 		this.Width = width;
 		this.Height = height;
+
+		Pathfinder = new Pathfinder (this);
+
 		tiles = new Tile[width, height];
 		createTiles (width, height);
 		jobs = new JobQueue ();
@@ -44,7 +40,10 @@ public class World {
 
 	public void createWorkerAt(int x, int y)
 	{
-		Worker w = new Worker (tiles [x, y], UnityEngine.Random.Range(4.5f, 7.5f), UnityEngine.Random.Range(0.5f, 5f));
+		Tile t = tiles [x, y];
+		if (t.type == Tile.TYPE.EMPTY)
+			return; // Cant create workers on empty
+		Worker w = new Worker (t, UnityEngine.Random.Range(4.5f, 7.5f), UnityEngine.Random.Range(0.5f, 5f));
 		workers.Add (w);
 		if (cbWorkerCreated != null)
 			cbWorkerCreated (w);
@@ -107,7 +106,7 @@ public class World {
 	public Job createInstallJobAt (Furniture.TYPE type, int x, int y)
 	{
 		Tile tile = tiles [x, y];
-		if (tile.isValidInstallation(type) == false || tile.isPassable() == false)
+		if (tile.type == Tile.TYPE.EMPTY || tile.isValidInstallation(type) == false || tile.isPassable() == false)
 			return null;
 
 		// TODO: Furniture Prototype to grab data like work cost?
@@ -117,6 +116,8 @@ public class World {
 			Tile job_tile = j.tile;
 			job_tile.installFurniture(new Furniture (job_tile, type));
 			job_tile.setJob(null); // remove the job from tile
+			if (cbTileChanged != null)
+				cbTileChanged(job_tile);
 		});
 		if (cbJobCreated != null)
 			cbJobCreated (job);
@@ -126,7 +127,7 @@ public class World {
 	public Job createMoveJobAt (int x, int y)
 	{
 		Tile tile = tiles [x, y];
-		if (tile.hasJob () || tile.isPassable() == false)
+		if (tile.type == Tile.TYPE.EMPTY || tile.hasJob () || tile.isPassable() == false)
 			return null;
 		Job job = new Job (tile, 0.01f, Job.TYPE.MOVE);
 		jobs.Add (job);

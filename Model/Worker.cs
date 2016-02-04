@@ -135,65 +135,6 @@ public class Worker {
 
 	public List<Tile> findPathTo(int x, int y)
 	{
-		return dijikstra_search(currentTile, currentTile.world.getTileAt(x, y));
+		return currentTile.world.Pathfinder.findPath(currentTile, currentTile.world.getTileAt(x, y));
 	}
-
-	protected List<Tile> dijikstra_search (Tile source, Tile target)
-	{
-		int predicted_length = 15;
-
-		Dictionary<Tile, float> dist = new Dictionary<Tile, float> ();
-		Dictionary<Tile, Tile> prev = new Dictionary<Tile, Tile> ();
-
-		// unvisited
-		List<Tile> unvisited = new List<Tile>(predicted_length);
-
-		// Initialization
-		foreach (Tile v in WorldController.Instance.world.tiles) {
-			dist[v] = Mathf.Infinity; 	// Unknown distance from source to v
-			prev[v] = null; 			// Previous node in optimal path from source
-			unvisited.Add(v); 					// All nodes initially in unvisited nodes
-		}
-
-		dist[source] = 0;
-		while (unvisited.Count > 0) {
-			Tile u = null;
-
-			// Source node will be selected first
-			// put the smallest distance in u
-			// u ← vertex in unvisted with min dist[u]
-			foreach (Tile possibleU in unvisited) {
-				if (u == null || dist [possibleU] < dist [u])
-					u = possibleU;
-			}
-			if (u == target) {
-				break; // we found the path
-			}
-
-			foreach (Tile v in u.getConnected()) { // where v is still in unvisited.
-				if (u.isPassable() == false && u != source) continue;
-				float alt = dist[u] + v.costToEnterFrom(u.X, u.Y);
-				if (alt < dist [v]) { // A shorter path to v has been found
-					dist[v] = alt;
-					prev[v] = u;
-				}
-			}
-
-			unvisited.Remove (u);
-		}
-
-		if (prev [target] == null) {
-			Debug.Log ("No route found");
-			return null; // No path to target could be found
-		}
-		List<Tile> path = new List<Tile> ();
-		Tile curr = target;
-		while (curr != null) {  // Construct the shortest path with a stack S
-			path.Add (curr); 	// Push the vertex onto the stack
-			curr = prev [curr];	// Traverse from target to source
-		} // Push the source onto the stack
-
-		return path;
-	}
-
 }
