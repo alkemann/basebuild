@@ -1,15 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 namespace Path {
 
-
-	public class RoomGraph
-	{
-
-	}
-
-	public class TileGraph
+	class TileGraph : GraphBase<Tile>
 	{
 		Dictionary<Tile, Node<Tile>> nodes;
 
@@ -40,81 +35,17 @@ namespace Path {
 			}
 		}
 
-		public List<Tile> search(Tile from, Tile target)
+		public override List<Tile> search(Tile from, Tile target)
 		{
-			Node<Tile> start = nodes [from];
-			Node<Tile> goal = nodes [target];
-			PriorityQueue<Node<Tile>> frontier = new PriorityQueue<Node<Tile>>();
-			frontier.put (start, 0);
-
-			Dictionary<Node<Tile>, Node<Tile>> came_from = new Dictionary<Node<Tile>, Node<Tile>> (); // Assume we must travel half nodes
-			Dictionary<Node<Tile>, float> cost_so_far = new Dictionary<Node<Tile>, float>();    // nodes.Count / 2
-
-			came_from [start] = null;
-			cost_so_far [start] = 0;
-
-			while (frontier.Count > 0) {
-				Node<Tile> current = frontier.get ();
-
-				if (current == goal)
-					break; // found our goal
-
-				foreach (Edge<Tile> edge in current.edges) {
-					Node<Tile> next = edge.node;
-					float new_cost = cost_so_far [current] + edge.cost;
-					if (cost_so_far.ContainsKey (next) == false || new_cost < cost_so_far [next]) {
-						cost_so_far [next] = new_cost;
-						int priority = (int)new_cost + heuristic_cost_estimate (next.data, target);
-						frontier.put (next, priority);
-						came_from [next] = current;
-					}
+			return aStarSearch(
+				nodes, // graph to search in
+				from, // Tile to start in
+				target,  // Destination tile
+				(Tile one, Tile two) => { // heuristic method
+					return one.heuristic_cost_estimate (two);
 				}
-			}
-
-			if (came_from [goal] == null) {
-				Debug.Log ("No path found");
-				return null;
-			}
-
-			List<Tile> path = new List<Tile> ();
-			Node<Tile> iterator = goal;
-			do {
-				path.Add(iterator.data);
-				iterator = came_from[iterator];
-			} while (iterator != null);
-			return path;
-		}
-
-		protected int heuristic_cost_estimate (Tile start, Tile goal)
-		{
-			return Mathf.Abs(start.X-goal.X) + Mathf.Abs(start.Y-goal.Y);
+			);
 		}
 
 	}
-
-	class Node<T>
-	{
-		public T data;
-		public List<Edge<T>> edges;
-
-		public Node(T data)
-		{
-			this.data = data;
-			edges = new List<Edge<T>> (8);
-		}
-	}
-
-	class Edge<T>
-	{
-		public Node<T> node;
-		public float cost;
-
-		public Edge (Node<T> node, float cost)
-		{
-			this.node = node;
-			this.cost = cost;
-		}
-
-	}
-
 }

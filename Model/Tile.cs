@@ -134,6 +134,11 @@ public class Tile  {
 		return true;
 	}
 
+	public int heuristic_cost_estimate (Tile other)
+	{
+		return Mathf.Abs(this.X - other.X) + Mathf.Abs(this.Y - other.Y);
+	}
+
 	public float distanceTo (Tile neighbor)
 	{
 		if (neighbor.X != X && neighbor.Y != Y) // diagonally
