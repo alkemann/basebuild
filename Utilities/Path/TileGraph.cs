@@ -28,7 +28,7 @@ namespace Path {
 				// get connected tiles
 				foreach (Tile connected in tile.getConnected()) {
 					// neighbor is not in space or not passable, add edge to it
-					if (connected.type != Tile.TYPE.EMPTY ) { // && connected.isPassable ()
+					if (connected.type != Tile.TYPE.EMPTY && connected.isPassable ()) {
 						node.edges.Add (new Edge<Tile> (nodes[connected], connected.costToEnterFrom (tile.X, tile.Y)));
 					}
 				}
