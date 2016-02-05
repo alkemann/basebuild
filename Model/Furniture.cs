@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 
 public class Furniture {
-	public enum TYPE { NONE, WALL, DOOR, TERMINAL };
+	public enum TYPE { NONE, WALL, DOOR, TERMINAL, SPAWNER };
 
 	public TYPE type { get; protected set; }
 

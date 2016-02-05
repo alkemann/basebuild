@@ -117,6 +117,9 @@ public class FurnitureSpritesView : MonoBehaviour
 		case Furniture.TYPE.TERMINAL:
 			sprite_name = "TERMINAL";
 			break;
+		case Furniture.TYPE.SPAWNER:
+			sprite_name = "SPAWNER";
+			break;
 		}
 		if (spriteMap.ContainsKey(sprite_name)) {
 			return spriteMap[sprite_name];

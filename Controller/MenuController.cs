@@ -3,6 +3,8 @@ using System.Collections;
 
 public class MenuController : MonoBehaviour {
 
+	public static bool active = false;
+
 	public enum COMMANDS
 	{
 		NONE,
@@ -14,6 +16,8 @@ public class MenuController : MonoBehaviour {
 
 	public void setCommandButton(string command_string)
 	{
+		if (MenuController.active == false)
+			return;
 		WorldController wc = WorldController.Instance;
 
 		wc.constructTileType = Tile.TYPE.NONE;
@@ -39,11 +43,15 @@ public class MenuController : MonoBehaviour {
 	}
 	public void setTileTypeButton(string type_string)
 	{
+		if (MenuController.active == false)
+			return;
 		WorldController.Instance.constructTileType =getTypeFromString (type_string);
 	}
 
 	public void setFurnitureTypeButton(string type_string)
 	{
+		if (MenuController.active == false)
+			return;
 		WorldController.Instance.installFurnitureType = getFurnitureTipeFromString (type_string);
 	}
 
@@ -71,11 +79,15 @@ public class MenuController : MonoBehaviour {
 
 	public void addWorker()
 	{
+		if (MenuController.active == false)
+			return;
 		WorldController.Instance.world.createWorkerAt (WorldController.Instance.world.Width / 2, WorldController.Instance.world.Height / 2);
 	}
 
 	public void togglePlayPayse()
 	{
+		if (MenuController.active == false)
+			return;
 		WorldController.Instance.world.pause = !WorldController.Instance.world.pause;
 	}
 }

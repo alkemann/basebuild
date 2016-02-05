@@ -150,13 +150,28 @@ public class World {
 		cbJobCreated += cb;
 	}
 
+	public void unregistOnJobCreated (Action<Job> cb)
+	{
+		cbJobCreated -= cb;
+	}
+
 	public void registerOnWorkerCreated(Action<Worker> cb)
 	{
 		cbWorkerCreated += cb;
 	}
 
+	public void unregistOnWorkerCreated (Action<Worker> cb)
+	{
+		cbWorkerCreated -= cb;
+	}
+
 	public void registerOnTileChanged (Action<Tile> cb)
 	{
 		cbTileChanged += cb;
+	}
+
+	public void unregistOnTileCreated (Action<Tile> cb)
+	{
+		cbTileChanged -= cb;
 	}
 }
