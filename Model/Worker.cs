@@ -135,6 +135,6 @@ public class Worker {
 
 	public List<Tile> findPathTo(int x, int y)
 	{
-		return currentTile.world.Pathfinder.findPath(currentTile, currentTile.world.getTileAt(x, y));
+		return currentTile.world.findPath(currentTile, currentTile.world.getTileAt(x, y));
 	}
 }

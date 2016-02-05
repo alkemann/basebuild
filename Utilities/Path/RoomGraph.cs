@@ -8,7 +8,7 @@ class Room
 }
 
 namespace Path {
-	class RoomGraph : GraphBase<Room>
+	class RoomGraph : Graphs<Room>
 	{
 		Dictionary<Room, Node<Room>> nodes;
 

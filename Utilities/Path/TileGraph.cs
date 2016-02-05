@@ -4,7 +4,7 @@ using System;
 
 namespace Path {
 
-	class TileGraph : GraphBase<Tile>
+	class TileGraph : Graphs<Tile>
 	{
 		Dictionary<Tile, Node<Tile>> nodes;
 

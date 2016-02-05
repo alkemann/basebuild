@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
+using Path;
 
 public class World {
 
@@ -12,7 +13,7 @@ public class World {
 	public JobQueue jobs;
 	public bool pause;
 
-	public Pathfinder Pathfinder { get; protected set; }
+	Finder Pathfinder;
 
 	public Job getNearestJob (int x, int y)
 	{
@@ -30,12 +31,17 @@ public class World {
 		this.Width = width;
 		this.Height = height;
 
-		Pathfinder = new Pathfinder (this);
+		Pathfinder = new Finder(this);
 
 		tiles = new Tile[width, height];
 		createTiles (width, height);
 		jobs = new JobQueue ();
 		workers = new List<Worker> ();
+	}
+
+	public List<Tile> findPath (Tile from, Tile to)
+	{
+		return Pathfinder.findPath (from, to);
 	}
 
 	public void createWorkerAt(int x, int y)
