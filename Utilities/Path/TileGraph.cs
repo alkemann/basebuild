@@ -4,6 +4,25 @@ using System;
 
 namespace Path {
 
+	public class Finder
+	{
+		World world;
+		TileGraph tileGraph;
+
+		public Finder(World world)
+		{
+			this.world = world;
+			world.registerOnTileChanged ((t) => tileGraph = null); // listen to all tile changes to invalidate graph
+		}
+
+		public List<Tile> findPath(Tile from, Tile to)
+		{
+			if (tileGraph == null)
+				tileGraph = new TileGraph (world);
+			return tileGraph.search(from, to);
+		}
+	}
+
 	class TileGraph : Graphs<Tile>
 	{
 		Dictionary<Tile, Node<Tile>> nodes;
@@ -25,13 +44,15 @@ namespace Path {
 			// foreach node
 			foreach (Node<Tile> node in nodes.Values) {
 				Tile tile = node.data;
+				List<Edge<Tile>> edges = new List<Edge<Tile>> (8);
 				// get connected tiles
 				foreach (Tile connected in tile.getConnected()) {
 					// neighbor is not in space or not passable, add edge to it
 					if (connected.type != Tile.TYPE.EMPTY && connected.isPassable ()) {
-						node.edges.Add (new Edge<Tile> (nodes[connected], connected.costToEnterFrom (tile.X, tile.Y)));
+						edges.Add (new Edge<Tile> (nodes[connected], connected.costToEnterFrom (tile.X, tile.Y)));
 					}
 				}
+				node.edges = edges.ToArray ();
 			}
 		}
 

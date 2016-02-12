@@ -20,12 +20,11 @@ namespace Path {
 	class Node<T>
 	{
 		public T data;
-		public List<Edge<T>> edges;
+		public Edge<T>[] edges;
 
 		public Node(T data)
 		{
 			this.data = data;
-			edges = new List<Edge<T>> (8);
 		}
 	}
 
@@ -69,8 +68,8 @@ namespace Path {
 				}
 			}
 
-			if (came_from [goal] == null) {
-				Debug.Log ("No path found");
+			if (came_from.ContainsKey(goal) == false || came_from [goal] == null) {
+				// TODO  have worker drop job
 				return null;
 			}
 
