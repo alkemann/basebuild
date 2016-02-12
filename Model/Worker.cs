@@ -20,7 +20,7 @@ public class Worker {
 	Tile destinationTile;
 	float movementPercentage;
 
-	List<Tile> travelPath;
+	Stack<Tile> travelPath;
 	Tile currentlyMovingTo;
 
 	float walk_speed;
@@ -67,9 +67,7 @@ public class Worker {
 					cbStateChange (this);
 			} else {
 				// Move to next tile in path
-				int i = travelPath.Count - 1;
-				currentlyMovingTo = travelPath [i];
-				travelPath.RemoveAt (i);
+				currentlyMovingTo = travelPath.Pop();
 				if (currentlyMovingTo.isWalkable() == false) {
 					// changes since path was built means the
 					// path must be abandoned, if new one cant be build
@@ -149,9 +147,7 @@ public class Worker {
 				destinationTile = currentlyMovingTo = currentTile;
 				// no path found, cant move
 			} else {
-				int i = travelPath.Count - 1;
-				currentlyMovingTo = travelPath [i];
-				travelPath.RemoveAt (i);
+				currentlyMovingTo = travelPath.Pop();
 				if (cbStateChange != null)
 					cbStateChange (this);
 			}
@@ -163,7 +159,7 @@ public class Worker {
 		cbStateChange += cb;
 	}
 
-	public List<Tile> findPathTo(int x, int y)
+	public Stack<Tile> findPathTo(int x, int y)
 	{
 		return currentTile.world.findPath(currentTile, currentTile.world.getTileAt(x, y));
 	}

@@ -17,7 +17,7 @@ namespace Path {
 			nodes = new Dictionary<Room, Node<Room>> ();
 		}
 
-		public override List<Room> search (Room from, Room target)
+		public override Stack<Room> search (Room from, Room target)
 		{
 			
 			return aStarSearch(

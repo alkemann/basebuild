@@ -15,7 +15,7 @@ namespace Path {
 			world.registerOnTileChanged ((t) => tileGraph = null); // listen to all tile changes to invalidate graph
 		}
 
-		public List<Tile> findPath(Tile from, Tile to)
+		public Stack<Tile> findPath(Tile from, Tile to)
 		{
 			if (tileGraph == null)
 				tileGraph = new TileGraph (world);
@@ -56,7 +56,7 @@ namespace Path {
 			}
 		}
 
-		public override List<Tile> search(Tile from, Tile target)
+		public override Stack<Tile> search(Tile from, Tile target)
 		{
 			return aStarSearch(
 				nodes, // graph to search in

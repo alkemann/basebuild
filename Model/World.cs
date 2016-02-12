@@ -49,7 +49,7 @@ public class World {
 		workers = new List<Worker> ();
 	}
 
-	public List<Tile> findPath (Tile from, Tile to)
+	public Stack<Tile> findPath (Tile from, Tile to)
 	{
 		return Pathfinder.findPath (from, to);
 	}

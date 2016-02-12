@@ -30,9 +30,9 @@ namespace Path {
 
 	abstract class Graphs<T>
 	{
-		abstract public List<T> search (T from, T target);
+		abstract public Stack<T> search (T from, T target);
 
-		internal List<T> aStarSearch(
+		internal Stack<T> aStarSearch(
 			Dictionary<T, Node<T>> nodes,
 			T from,
 			T target,
@@ -69,14 +69,13 @@ namespace Path {
 			}
 
 			if (came_from.ContainsKey(goal) == false || came_from [goal] == null) {
-				// TODO  have worker drop job
 				return null;
 			}
 
-			List<T> path = new List<T> ();
+			Stack<T> path = new Stack<T> ();
 			Node<T> iterator = goal;
 			do {
-				path.Add(iterator.data);
+				path.Push(iterator.data);
 				iterator = came_from[iterator];
 			} while (iterator != null);
 			return path;

@@ -57,7 +57,7 @@ public class JobQueue {
 
 	float distanceToTileFrom (Tile tile, int x, int y)
 	{
-		List<Tile> path = tile.world.findPath (tile, tile.world.getTileAt (x, y));
+		Stack<Tile> path = tile.world.findPath (tile, tile.world.getTileAt (x, y));
 		if (path == null) {
 			throw new UnreachableLocationException ();
 		}
