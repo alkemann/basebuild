@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class Furniture {
 	public enum TYPE { NONE, WALL, DOOR, TERMINAL, SPAWNER };
+	public static float[] costs = {0, 2f, 10f, 50f, 100f};
 
 	public TYPE type { get; protected set; }
 
@@ -23,6 +24,11 @@ public class Furniture {
 		} else {
 			this.linkedObject = false;
 		}
+	}
+
+	public float costToBuild()
+	{
+		return Furniture.costs [(int) this.type];
 	}
 
 	public void registerOnChangeCallback (Action<Furniture> cb)

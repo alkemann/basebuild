@@ -125,8 +125,7 @@ public class World {
 		if (tile.isValidInstallation(type) == false || tile.isWalkable() == false)
 			return null;
 
-		// TODO: Furniture Prototype to grab data like work cost?
-		Job job = new Job(tile, 2f, Job.TYPE.INSTALL);
+		Job job = new Job(tile, Furniture.costs[(int) type], Job.TYPE.INSTALL);
 		jobs.Add (job);
 		job.registerOnCompleteCallback ((j) => {
 			Tile job_tile = j.tile;
