@@ -12,7 +12,7 @@ public class StartControll : MonoBehaviour {
 		int y = WorldController.Instance.WIDTH / 2;
 
 		Action<Job> autoComplete = (Job j) => {
-			Job job = world.getNearestJob(x, y);
+			Job job = world.getFirstJob();
 			job.doWork(100f);
 		};
 
@@ -31,7 +31,7 @@ public class StartControll : MonoBehaviour {
 		world.buildTileAt (Tile.TYPE.FLOOR, x, y-1);
 		world.buildTileAt (Tile.TYPE.FLOOR, x-1, y-1);
 
-
+		world.getFirstJob();
 		world.unregistOnJobCreated (autoComplete);
 		MenuController.active = true;
 		Destroy (root); // Wont need this any more

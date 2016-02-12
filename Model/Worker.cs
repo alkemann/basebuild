@@ -76,7 +76,10 @@ public class Worker {
 	{
 		// doesnt have a job, look for one
 		Job new_job = currentTile.world.getNearestJob(currentTile.X, currentTile.Y);
-		if (new_job != null) {
+		if (new_job == null) {
+			// if no job found, idle a bit before looking again for something to do
+			job = new Job(currentTile, 10, Job.TYPE.NONE); // TODO: Make an IDLE job type? would help with animation
+		} else {
 			setJob (new_job);
 		}
 	}

@@ -28,23 +28,39 @@ public class JobQueue {
 		Job nearest = null;
 		float distance = float.MaxValue;
 		foreach (Job job in jobQueue) {
-			float how_far_is_this_job = distanceToTileFrom (job.tile, x, y);
-			if (how_far_is_this_job < distance) {
-				nearest = job;
-				distance = how_far_is_this_job;
+			try {
+				float how_far_is_this_job = distanceToTileFrom (job.tile, x, y);
+				if (how_far_is_this_job < distance) {
+					nearest = job;
+					distance = how_far_is_this_job;
+				}
+			} catch (UnreachableLocationException e) {
+				// Cant do  that job
 			}
 		}
 		if (nearest == null) {
-			Debug.LogError ("Nearest still null!");
+			// None of the jobs in the queue was reachable from x,y	
 			return null;
 		}
 		jobQueue.Remove (nearest);
 		return nearest;
 	}
 
+	public Job getFirstJob()
+	{
+		if (jobQueue.Count == 0)
+			return null;
+		Job j = jobQueue [0];
+		jobQueue.RemoveAt(0);
+		return j;
+	}
+
 	float distanceToTileFrom (Tile tile, int x, int y)
 	{
-		// TODO: Add pathing logic
-		return Mathf.Sqrt (Mathf.Pow (tile.X - x, 2) + Mathf.Pow (tile.Y - y, 2));
+		List<Tile> path = tile.world.findPath (tile, tile.world.getTileAt (x, y));
+		if (path == null) {
+			throw new UnreachableLocationException ();
+		}
+		return path.Count;
 	}
 }

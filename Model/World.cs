@@ -20,6 +20,11 @@ public class World {
 		return jobs.getNearestJob (x, y);
 	}
 
+	public Job getFirstJob ()
+	{
+		return jobs.getFirstJob ();
+	}
+
 	List<Worker> workers;
 
 	Action<Worker> cbWorkerCreated;
