@@ -135,6 +135,10 @@ public class Worker {
 			if (travelPath == null) {
 				destinationTile = currentlyMovingTo = currentTile;
 				// no path found, cant move
+				if (job != null) {
+					tile.world.putJobBack (job);
+					job = null;
+				}
 			} else {
 				int i = travelPath.Count - 1;
 				currentlyMovingTo = travelPath [i];

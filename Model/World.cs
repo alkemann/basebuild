@@ -25,6 +25,11 @@ public class World {
 		return jobs.getFirstJob ();
 	}
 
+	public void putJobBack (Job job)
+	{
+		this.jobs.Add (job);
+	}
+
 	List<Worker> workers;
 
 	Action<Worker> cbWorkerCreated;
