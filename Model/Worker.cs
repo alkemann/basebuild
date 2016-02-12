@@ -70,6 +70,19 @@ public class Worker {
 				int i = travelPath.Count - 1;
 				currentlyMovingTo = travelPath [i];
 				travelPath.RemoveAt (i);
+				if (currentlyMovingTo.isWalkable() == false) {
+					// changes since path was built means the
+					// path must be abandoned, if new one cant be build
+					// job and destination must be abandoned
+					travelPath = findPathTo (destinationTile.X, destinationTile.Y);
+					if (travelPath == null) {
+						destinationTile = currentlyMovingTo = currentTile;
+						if (job != null) {
+							currentTile.world.putJobBack (job);
+							setJob (null);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -135,10 +148,6 @@ public class Worker {
 			if (travelPath == null) {
 				destinationTile = currentlyMovingTo = currentTile;
 				// no path found, cant move
-				if (job != null) {
-					tile.world.putJobBack (job);
-					job = null;
-				}
 			} else {
 				int i = travelPath.Count - 1;
 				currentlyMovingTo = travelPath [i];
