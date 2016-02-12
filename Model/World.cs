@@ -122,7 +122,7 @@ public class World {
 	public Job createInstallJobAt (Furniture.TYPE type, int x, int y)
 	{
 		Tile tile = tiles [x, y];
-		if (tile.type == Tile.TYPE.EMPTY || tile.isValidInstallation(type) == false || tile.isPassable() == false)
+		if (tile.isValidInstallation(type) == false || tile.isWalkable() == false)
 			return null;
 
 		// TODO: Furniture Prototype to grab data like work cost?
@@ -143,7 +143,7 @@ public class World {
 	public Job createMoveJobAt (int x, int y)
 	{
 		Tile tile = tiles [x, y];
-		if (tile.type == Tile.TYPE.EMPTY || tile.hasJob () || tile.isPassable() == false)
+		if (tile.hasJob () || tile.isWalkable() == false)
 			return null;
 		Job job = new Job (tile, 0.01f, Job.TYPE.MOVE);
 		jobs.Add (job);

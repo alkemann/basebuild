@@ -134,6 +134,11 @@ public class Tile  {
 		return true;
 	}
 
+	public bool isWalkable ()
+	{
+		return this.type == TYPE.FLOOR && this.isPassable ();
+	}
+
 	public int heuristic_cost_estimate (Tile other)
 	{
 		return Mathf.Abs(this.X - other.X) + Mathf.Abs(this.Y - other.Y);
