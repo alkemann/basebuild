@@ -15,6 +15,7 @@ public class Worker {
 		}
 	}
 
+	Tile cameFrom;
 	Tile currentTile;
 	Tile destinationTile;
 	float movementPercentage;
@@ -57,6 +58,7 @@ public class Worker {
 		float percThisFrame = distThisFrame / distToTravel;
 		movementPercentage += percThisFrame;
 		if (movementPercentage >= 1) {
+			cameFrom = currentTile;
 			currentTile = currentlyMovingTo;
 			movementPercentage = 0;
 			if (currentTile == destinationTile) {
@@ -88,7 +90,19 @@ public class Worker {
 	{
 		if (currentTile == job.tile) {
 			if (job.doWork (deltaTime * work_speed)) {
+				Job j = job;
 				setJob (null);
+				if (j.tile.isPassable () == false) {
+					// The tile the worker completed work in
+					// is nolonger safe, is the one they came from
+					// safe?
+					if (cameFrom.isPassable ())
+						setDestination (cameFrom);
+					else {
+						// TODO look for another safe til to move to
+						// try to go in the same general diretion?
+					}
+				}
 			}
 		}
 		else {
