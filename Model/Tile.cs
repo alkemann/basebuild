@@ -144,18 +144,10 @@ public class Tile  {
 		return Mathf.Abs(this.X - other.X) + Mathf.Abs(this.Y - other.Y);
 	}
 
-	public float distanceTo (Tile neighbor)
-	{
-		if (neighbor.X != X && neighbor.Y != Y) // diagonally
-			return 1.001f;
-		else
-			return 1; // TODO: better movement cost
-	}
-
 	public float costToEnterFrom (int x, int y)
 	{
 		if (this.Furniture != null && this.Furniture.type == Furniture.TYPE.WALL) {
-			return Mathf.Infinity;
+			return 10000;
 		} else if (x != X && y != Y) // diagonally
 			return 1.001f;
 		else
