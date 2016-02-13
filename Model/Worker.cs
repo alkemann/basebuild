@@ -53,7 +53,8 @@ public class Worker {
 
 	void moveWorker (float deltaTime)
 	{
-		float distToTravel = Mathf.Sqrt (Mathf.Pow (currentTile.X - currentlyMovingTo.X, 2) + Mathf.Pow (currentTile.Y - currentlyMovingTo.Y, 2));
+		float distToTravel = currentlyMovingTo.costToEnterFrom (currentTile.X, currentTile.Y); // actually pay the movement cost of a tile
+		// TODO pay half costToEnterFrom going in and other half going out.
 		float distThisFrame = walk_speed * deltaTime;
 		float percThisFrame = distThisFrame / distToTravel;
 		movementPercentage += percThisFrame;
