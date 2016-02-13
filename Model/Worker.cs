@@ -69,6 +69,11 @@ public class Worker {
 			} else {
 				// Move to next tile in path
 				currentlyMovingTo = travelPath.Pop();
+
+
+				// FIXME: how can we look for new path if the path
+				// we originally planned is no longer valid?
+				/*
 				if (currentlyMovingTo.isWalkable() == false) {
 					// changes since path was built means the
 					// path must be abandoned, if new one cant be build
@@ -82,6 +87,7 @@ public class Worker {
 						}
 					}
 				}
+				*/
 			}
 		}
 	}
