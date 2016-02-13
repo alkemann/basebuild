@@ -147,11 +147,11 @@ public class Tile  {
 	public float costToEnterFrom (int x, int y)
 	{
 		if (this.Furniture != null && this.Furniture.type == Furniture.TYPE.WALL) {
-			return 10000;
+			return 50f;
 		} else if (x != X && y != Y) // diagonally
 			return 1.001f;
 		else
-			return 1; // TODO: better movement cost
+			return 1f; // TODO: better movement cost
 	}
 
 	public void registerOnChangeCallback(Action<Tile> cb)
