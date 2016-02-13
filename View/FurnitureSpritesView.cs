@@ -45,10 +45,6 @@ public class FurnitureSpritesView : MonoBehaviour
 
 		// Make sure we remove game objects for jobs when they are complete
 		// Or canceled
-		Action<Job> onJobComplete = (j) => {
-			jobToGameObjectMap.Remove (job);
-			Destroy (job_go);
-		};
 		job.registerOnCompleteCallback(onJobComplete);
 		job.registerOnCancelCallback (onJobComplete);
 
@@ -69,6 +65,15 @@ public class FurnitureSpritesView : MonoBehaviour
 
 			});
 		}
+	}
+
+	void onJobComplete(Job job)
+	{
+		job.unregisterOnCompleteCallback(onJobComplete);
+		job.unregisterOnCancelCallback(onJobComplete);
+		GameObject job_go = jobToGameObjectMap [job];
+		jobToGameObjectMap.Remove (job);
+		Destroy (job_go);
 	}
 
 	void onFurnitureChanged (Furniture furn)
