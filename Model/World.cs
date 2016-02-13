@@ -30,11 +30,10 @@ public class World {
 		this.jobs.Add (job);
 	}
 
-	List<Worker> workers;
-
 	Action<Worker> cbWorkerCreated;
 	Action<Tile> cbTileChanged;
 	Action<Job> cbJobCreated;
+	Action<float> cbTick;
 
 	public World (int width = 100, int height = 100)
 	{
@@ -46,7 +45,6 @@ public class World {
 		tiles = new Tile[width, height];
 		createTiles (width, height);
 		jobs = new JobQueue ();
-		workers = new List<Worker> ();
 	}
 
 	public Stack<Tile> findPath (Tile from, Tile to)
@@ -60,7 +58,9 @@ public class World {
 		if (t.type == Tile.TYPE.EMPTY)
 			return; // Cant create workers on empty
 		Worker w = new Worker (t, UnityEngine.Random.Range(4.5f, 7.5f), UnityEngine.Random.Range(0.5f, 5f));
-		workers.Add (w);
+
+		registerOnTick (w.tick); // make sure workers can react to tick
+
 		if (cbWorkerCreated != null)
 			cbWorkerCreated (w);
 	}
@@ -69,14 +69,9 @@ public class World {
 	{
 		if (pause)
 			return;
-		foreach(Worker w in getWorkers()) {
-			w.tick (Time.deltaTime);
+		if (cbTick != null) {
+			cbTick (deltaTime);
 		}
-	}
-
-	public List<Worker> getWorkers ()
-	{
-		return workers;
 	}
 
 	public bool isCoordinatesWithinBuildWorld (int x, int y)
@@ -148,9 +143,23 @@ public class World {
 		jobs.Add (job);
 		if (cbJobCreated != null)
 			cbJobCreated (job);
-		job.registerOnCompleteCallback ((j) => {
-			tile.setJob(null); // remove the job from tile
-		});
+
+		// TODO was this needed?
+//		job.registerOnCompleteCallback ((j) => {
+//			tile.setJob(null); // remove the job from tile
+//		});
+		return job;
+	}
+
+	public Job createCustomJobAt(int x, int y, float workload, Job.TYPE type) {
+
+		Tile tile = tiles [x, y];
+		if (tile.hasJob () || tile.isWalkable() == false)
+			return null;
+		Job job = new Job (tile, workload, type);
+		jobs.Add (job);
+		if (cbJobCreated != null)
+			cbJobCreated (job);
 		return job;
 	}
 
@@ -182,5 +191,15 @@ public class World {
 	public void unregistOnTileCreated (Action<Tile> cb)
 	{
 		cbTileChanged -= cb;
+	}
+
+	public void registerOnTick (Action<float> cb)
+	{
+		cbTick += cb;
+	}
+
+	public void unregistOnTick (Action<float> cb)
+	{
+		cbTick -= cb;
 	}
 }

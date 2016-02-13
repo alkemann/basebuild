@@ -32,7 +32,12 @@ public class SoundsView : MonoBehaviour
 		if (soundCooldown > 0)
 			return;
 
-		AudioClip ac = Resources.Load<AudioClip> ("Sounds/job");
+		AudioClip ac;
+		if (job.type == Job.TYPE.TERMINAL_WORK) {
+			ac = Resources.Load<AudioClip> ("Sounds/terminal");
+		} else {
+			ac = Resources.Load<AudioClip> ("Sounds/job");
+		}
 		AudioSource.PlayClipAtPoint (ac, Camera.main.transform.position);
 		soundCooldown = 0.1f;
 	}

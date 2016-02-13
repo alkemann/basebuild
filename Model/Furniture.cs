@@ -14,6 +14,8 @@ public class Furniture {
 
 	Action<Furniture> cbFurnitureChanged;
 
+	float coolDown = 0f;
+
 
 	public Furniture (Tile tile, TYPE type)
 	{
@@ -23,6 +25,21 @@ public class Furniture {
 			this.linkedObject = true;
 		} else {
 			this.linkedObject = false;
+		}
+		if (type == TYPE.TERMINAL) {
+			// TODO how to cleanly place furniture code like this
+			coolDown = UnityEngine.Random.Range (2f, 3f); // set first cooldown
+			tile.world.registerOnTick (terminalTrigger);
+		}
+	}
+
+	void terminalTrigger(float time)
+	{
+		coolDown -= time;
+		if (coolDown <= 0) {
+			// Terminal has triggered, lets create a job to force a worker to move here
+			tile.world.createCustomJobAt(tile.X, tile.Y, 5f, Job.TYPE.TERMINAL_WORK);
+			coolDown = UnityEngine.Random.Range (5f, 6f); // reset cooldown
 		}
 	}
 

@@ -4,7 +4,7 @@ using System;
 
 public class Job {
 
-	public enum TYPE { NONE, MOVE, CONSTRUCT, INSTALL }
+	public enum TYPE { NONE, MOVE, CONSTRUCT, INSTALL, TERMINAL_WORK }
 
 	public TYPE type { get; protected set; }
 	public Tile tile { get; protected set; }
