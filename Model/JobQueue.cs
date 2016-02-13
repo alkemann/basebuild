@@ -28,14 +28,10 @@ public class JobQueue {
 		Job nearest = null;
 		float distance = float.MaxValue;
 		foreach (Job job in jobQueue) {
-			try {
-				float how_far_is_this_job = distanceToTileFrom (job.tile, x, y);
-				if (how_far_is_this_job < distance) {
-					nearest = job;
-					distance = how_far_is_this_job;
-				}
-			} catch (UnreachableLocationException e) {
-				// Cant do  that job
+			float how_far_is_this_job = distanceToTileFrom (job.tile, x, y);
+			if (how_far_is_this_job != 0 && how_far_is_this_job < distance) {
+				nearest = job;
+				distance = how_far_is_this_job;
 			}
 		}
 		if (nearest == null) {
@@ -59,7 +55,7 @@ public class JobQueue {
 	{
 		Stack<Tile> path = tile.world.findPath (tile, tile.world.getTileAt (x, y));
 		if (path == null) {
-			throw new UnreachableLocationException ();
+			return 0;
 		}
 		return path.Count;
 	}
