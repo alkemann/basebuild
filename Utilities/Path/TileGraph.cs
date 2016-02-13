@@ -49,7 +49,12 @@ namespace Path {
 				foreach (Tile connected in tile.getConnected()) {
 					// neighbor is not in space or not passable, add edge to it
 					if (connected.type == Tile.TYPE.FLOOR) {
-						edges.Add (new Edge<Tile> (nodes[connected], connected.costToEnterFrom (tile.X, tile.Y)));
+						edges.Add (
+							new Edge<Tile> (
+								nodes[connected],
+								connected.costToEnterFrom (tile.X, tile.Y) + (connected.hasJob() ? 5f : 0f)  // add cost for pathfinding if tile has job
+							)
+						);
 					}
 				}
 				node.edges = edges.ToArray ();
