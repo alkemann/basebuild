@@ -100,24 +100,46 @@ public class Worker {
 	void workForSomeTime (float deltaTime)
 	{
 		if (currentTile == job.tile) {
-			if (job.doWork (deltaTime * work_speed)) {
-				Job j = job;
-				setJob (null);
-				if (j.tile.isPassable () == false) {
-					// The tile the worker completed work in
-					// is nolonger safe, is the one they came from
-					// safe?
-					if (cameFrom.isPassable ())
-						setDestination (cameFrom);
-					else {
-						// TODO look for another safe til to move to
-						// try to go in the same general diretion?
-					}
-				}
+			bool work_done = job.doWork (deltaTime * work_speed);
+			if (work_done) {
+				workCompleted ();
 			}
+		} else {
+			setDestination (job.tile);
+		}
+	}
+
+	private void workCompleted ()
+	{
+		job.tile.setJob (null);
+		setJob (null);
+		// At this point, I want to make sure no references exist to
+		// the Job, and have it garbage collected.
+		if (currentTile.isWalkable () == false) {
+			// The tile the worker completed work in
+			// is nolonger safe, is the one they came from
+			// safe?
+			moveToSaferTile ();
+		}
+	}
+
+	void moveToSaferTile ()
+	{
+		if (cameFrom.isPassable ()) {
+			currentTile = destinationTile = currentlyMovingTo = cameFrom;
 		}
 		else {
-			setDestination (job.tile);
+			// TODO look for another safe til to move to
+			// try to go in the same general diretion?
+			List<Tile> neighbors = currentTile.getConnected ();
+			foreach (Tile t in neighbors) {
+				if (t.isWalkable () && t.hasJob () == false) {
+					//setDestination (t); // TODO should i teleport out?
+					currentTile = destinationTile = currentlyMovingTo = t;
+					return;
+					// hmm assuming nothing below needs to work
+				}
+			}
 		}
 	}
 
