@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 using System;
 
-public class Worker {
+public class Worker : ScriptableObject {
 
 	public float X {
 		get {
@@ -35,8 +36,34 @@ public class Worker {
 		currentTile = destinationTile = currentlyMovingTo = tile;
 		this.walk_speed = walk;
 		this.work_speed = work;
+		StartCoroutine (ai ());
 	}
 
+	IEnumerator ai() {
+		while (true) {
+
+			job = lookForJob ();
+			yield return new WaitUntil (() => {
+				return currentTile.world.jobs.count() > 0;
+			});
+			Debug.Log ("Job found");
+
+		}
+	}
+
+	Job lookForJob ()
+	{
+		// doesnt have a job, look for one
+		Job new_job = currentTile.world.getNearestJob(currentTile.X, currentTile.Y);
+		if (new_job == null) {
+			// if no job found, idle a bit before looking again for something to do
+			return new Job(null, 2f, Job.TYPE.NONE); // TODO: Make an IDLE job type? would help with animation
+		} else {
+			return new_job;
+		}
+	}
+
+	/*
 	public void tick(float deltaTime)
 	{
 		if (isMoving()) {
@@ -50,6 +77,7 @@ public class Worker {
 			}
 		}
 	}
+	*/
 
 	void moveWorker (float deltaTime)
 	{
@@ -89,18 +117,6 @@ public class Worker {
 				}
 				*/
 			}
-		}
-	}
-
-	void lookForJob ()
-	{
-		// doesnt have a job, look for one
-		Job new_job = currentTile.world.getNearestJob(currentTile.X, currentTile.Y);
-		if (new_job == null) {
-			// if no job found, idle a bit before looking again for something to do
-			job = new Job(null, 2f, Job.TYPE.NONE); // TODO: Make an IDLE job type? would help with animation
-		} else {
-			setJob (new_job);
 		}
 	}
 

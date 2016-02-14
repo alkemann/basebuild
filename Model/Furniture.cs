@@ -29,7 +29,7 @@ public class Furniture {
 		if (type == TYPE.TERMINAL) {
 			// TODO how to cleanly place furniture code like this
 			coolDown = UnityEngine.Random.Range (2f, 3f); // set first cooldown
-			tile.world.registerOnTick (terminalTrigger);
+			// FIXME: there is no tick
 		}
 	}
 

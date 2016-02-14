@@ -33,7 +33,6 @@ public class World {
 	Action<Worker> cbWorkerCreated;
 	Action<Tile> cbTileChanged;
 	Action<Job> cbJobCreated;
-	Action<float> cbTick;
 
 	public World (int width = 100, int height = 100)
 	{
@@ -59,19 +58,10 @@ public class World {
 			return; // Cant create workers on empty
 		Worker w = new Worker (t, UnityEngine.Random.Range(4.5f, 7.5f), UnityEngine.Random.Range(0.5f, 5f));
 
-		registerOnTick (w.tick); // make sure workers can react to tick
+		// FIXME: There is no tick
 
 		if (cbWorkerCreated != null)
 			cbWorkerCreated (w);
-	}
-
-	public void tick (float deltaTime)
-	{
-		if (pause)
-			return;
-		if (cbTick != null) {
-			cbTick (deltaTime);
-		}
 	}
 
 	public bool isCoordinatesWithinBuildWorld (int x, int y)
@@ -191,15 +181,5 @@ public class World {
 	public void unregistOnTileCreated (Action<Tile> cb)
 	{
 		cbTileChanged -= cb;
-	}
-
-	public void registerOnTick (Action<float> cb)
-	{
-		cbTick += cb;
-	}
-
-	public void unregistOnTick (Action<float> cb)
-	{
-		cbTick -= cb;
 	}
 }

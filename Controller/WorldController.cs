@@ -30,11 +30,6 @@ public class WorldController : MonoBehaviour {
 		GetComponentInParent<TileSpritesView> ().renderTiles (world);
 	}
 
-	public void Update()
-	{
-		world.tick (Time.deltaTime);
-	}
-
 	public GameObject jobsCounter;
 
 	public void FixedUpdate()
