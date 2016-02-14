@@ -137,7 +137,7 @@ public class World {
 	public Job createMoveJobAt (int x, int y)
 	{
 		Tile tile = tiles [x, y];
-		if (tile.hasJob () || tile.isWalkable() == false)
+		if (tile.hasJob () || tile.isWalkable () == false)
 			return null;
 		Job job = new Job (tile, 0.01f, Job.TYPE.MOVE);
 		jobs.Add (job);

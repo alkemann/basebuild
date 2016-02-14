@@ -98,7 +98,7 @@ public class Worker {
 		Job new_job = currentTile.world.getNearestJob(currentTile.X, currentTile.Y);
 		if (new_job == null) {
 			// if no job found, idle a bit before looking again for something to do
-			job = new Job(currentTile, 2f, Job.TYPE.NONE); // TODO: Make an IDLE job type? would help with animation
+			job = new Job(null, 2f, Job.TYPE.NONE); // TODO: Make an IDLE job type? would help with animation
 		} else {
 			setJob (new_job);
 		}
@@ -106,7 +106,7 @@ public class Worker {
 
 	void workForSomeTime (float deltaTime)
 	{
-		if (currentTile == job.tile) {
+		if (job.tile == null || currentTile == job.tile) {
 			bool work_done = job.doWork (deltaTime * work_speed);
 			if (work_done) {
 				workCompleted ();
@@ -118,7 +118,8 @@ public class Worker {
 
 	private void workCompleted ()
 	{
-		job.tile.setJob (null);
+		if (job.tile != null)
+			job.tile.setJob (null);
 		setJob (null);
 		// At this point, I want to make sure no references exist to
 		// the Job, and have it garbage collected.

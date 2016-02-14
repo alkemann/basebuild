@@ -15,10 +15,12 @@ public class Job {
 
 	public Job (Tile tile, float work = 2f, TYPE type = TYPE.INSTALL)
 	{
-		this.tile = tile;
+		if (tile != null) {
+			this.tile = tile;
+			tile.setJob (this);
+		}
 		this.work = work;
 		this.type = type;
-		tile.setJob (this);
 	}
 
 	public bool doWork(float work)

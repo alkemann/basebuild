@@ -28,6 +28,10 @@ public class JobQueue {
 		Job nearest = null;
 		float distance = float.MaxValue;
 		foreach (Job job in jobQueue) {
+			if (job.tile.X == x && job.tile.Y == y) {
+				nearest = job;
+				break; // always do the job you are at first!
+			}
 			float how_far_is_this_job = distanceToTileFrom (job.tile, x, y);
 			if (how_far_is_this_job != 0 && how_far_is_this_job < distance) {
 				nearest = job;
