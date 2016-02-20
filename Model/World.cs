@@ -15,21 +15,6 @@ public class World {
 
 	Finder Pathfinder;
 
-	public Job getNearestJob (int x, int y)
-	{
-		return jobs.getNearestJob (x, y);
-	}
-
-	public Job getFirstJob ()
-	{
-		return jobs.getFirstJob ();
-	}
-
-	public void putJobBack (Job job)
-	{
-		this.jobs.Add (job);
-	}
-
 	Action<Worker> cbWorkerCreated;
 	Action<Tile> cbTileChanged;
 	Action<Job> cbJobCreated;
@@ -164,6 +149,21 @@ public class World {
 		if (cbJobCreated != null)
 			cbJobCreated (job);
 		return job;
+	}
+
+	public Job getNearestJob (int x, int y)
+	{
+		return jobs.getNearestJob (x, y);
+	}
+
+	public Job getFirstJob ()
+	{
+		return jobs.getFirstJob ();
+	}
+
+	public void putJobBack (Job job)
+	{
+		this.jobs.Add (job);
 	}
 
 	public void registOnJobCreated(Action<Job> cb)

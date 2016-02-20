@@ -39,7 +39,7 @@ public class WorldController : MonoBehaviour {
 
 	public void FixedUpdate()
 	{
-		jobsCounter.GetComponent<Text> ().text = ""+world.jobs.count ();
+		jobsCounter.GetComponent<Text> ().text = ""+world.jobs.Count ();
 	}
 
 	public Tile getTileAt(int x, int y)
@@ -51,4 +51,5 @@ public class WorldController : MonoBehaviour {
 	{
 		world.buildTileAt (new_tile_type, x, y);
 	}
+
 }

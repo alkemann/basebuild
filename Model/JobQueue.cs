@@ -10,7 +10,7 @@ public class JobQueue {
 		jobQueue = new List<Job> (20);
 	}
 
-	public int count ()
+	public int Count ()
 	{
 		return jobQueue.Count;
 	}
