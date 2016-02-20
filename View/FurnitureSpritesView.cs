@@ -5,12 +5,12 @@ using System;
 public class FurnitureSpritesView : MonoBehaviour
 {
 	Dictionary<string, Sprite> spriteMap;
-	Dictionary<Furniture, GameObject> furnitureToGameObjectMap; // TODO pooling?
-	Dictionary<Job, GameObject> jobToGameObjectMap; // TODO pooling?
+	Dictionary<Furniture, GameObject> furnitureToGameObjectMap;
+	Dictionary<Job, GameObject> jobToGameObjectMap;
 
+	public GameObject job_prefab;
 	public GameObject furnitures_parent;
-	public Sprite job_placeholder_sprite;
-	public Sprite wall_placeholder_sprite;
+	public GameObject jobs_parent;
 
 	void Start ()
 	{
@@ -35,13 +35,13 @@ public class FurnitureSpritesView : MonoBehaviour
 		int y = tile.Y;
 
 		// Create game object and visualization for a Job
-		GameObject job_go = new GameObject ();
+
+		GameObject job_go = SimplePool.Spawn (job_prefab, new Vector3 (x, y, 0), Quaternion.identity);
 		jobToGameObjectMap [job] = job_go;
 
 		job_go.name = "Job_" + x + "_" + y;
 		job_go.transform.position = new Vector3 (x, y, -1f);
-		job_go.transform.SetParent (furnitures_parent.transform, true);
-		job_go.AddComponent<SpriteRenderer> ().sprite = job_placeholder_sprite;
+		job_go.transform.SetParent (jobs_parent.transform, true);
 
 		// Make sure we remove game objects for jobs when they are complete
 		// Or canceled
@@ -73,7 +73,7 @@ public class FurnitureSpritesView : MonoBehaviour
 		job.unregisterOnCancelCallback(onJobComplete);
 		GameObject job_go = jobToGameObjectMap [job];
 		jobToGameObjectMap.Remove (job);
-		Destroy (job_go);
+		SimplePool.Despawn (job_go);
 	}
 
 	void onFurnitureChanged (Furniture furn)
