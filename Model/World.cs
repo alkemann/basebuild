@@ -122,6 +122,7 @@ public class World {
 
 		Job job = new Job(tile, Furniture.costs[(int) type], Job.TYPE.INSTALL);
 		jobs.Add (job);
+		tile.setJob (job);
 		job.registerOnCompleteCallback ((j) => {
 			Tile job_tile = j.tile;
 			job_tile.installFurniture(new Furniture (job_tile, type));
@@ -141,6 +142,7 @@ public class World {
 			return null;
 		Job job = new Job (tile, 0.01f, Job.TYPE.MOVE);
 		jobs.Add (job);
+		tile.setJob (job);
 		if (cbJobCreated != null)
 			cbJobCreated (job);
 
@@ -158,6 +160,7 @@ public class World {
 			return null;
 		Job job = new Job (tile, workload, type);
 		jobs.Add (job);
+		tile.setJob (job);
 		if (cbJobCreated != null)
 			cbJobCreated (job);
 		return job;
