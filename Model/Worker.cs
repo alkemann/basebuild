@@ -112,7 +112,7 @@ public class Worker {
 				workCompleted ();
 			}
 		} else {
-			setDestination (job.tile);
+			setDestination (job);
 		}
 	}
 
@@ -166,6 +166,11 @@ public class Worker {
 		this.job = job;
 		if (cbStateChange != null)
 			cbStateChange (this);
+	}
+
+	public void setDestination(Job job)
+	{
+		setDestination (job.tile);
 	}
 
 	public void setDestination(Tile tile)
