@@ -23,6 +23,11 @@ public class Job {
 		this.type = type;
 	}
 
+	public bool ShouldWorkerStandOnTile()
+	{
+		return this.type == TYPE.MOVE || this.type == TYPE.TERMINAL_WORK || this.type == TYPE.NONE;
+	}
+
 	public void cancel()
 	{
 		if (cbOnCancel != null) {
