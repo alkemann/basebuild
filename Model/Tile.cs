@@ -79,25 +79,42 @@ public class Tile  {
 			throw new Exception ("Cant install where already there is one");
 		}
 		this.Furniture = furn;
-		// trigger onFurnitureChanged for the 4 neighbors if linked
-		if (furn.linkedObject) {
-			// Linked object, we need to upgrade neighbours
-			Tile tile_to_north = world.getTileAt (X, Y + 1);
-			if (tile_to_north != null && tile_to_north.hasLinkedInstallation())
-				tile_to_north.Furniture.neighbourChanged (this);
-			Tile tile_to_east = world.getTileAt (X + 1, Y);
-			if (tile_to_east != null && tile_to_east.hasLinkedInstallation())
-				tile_to_east.Furniture.neighbourChanged (this);
-			Tile tile_to_south = world.getTileAt (X, Y - 1);
-			if (tile_to_south != null && tile_to_south.hasLinkedInstallation())
-				tile_to_south.Furniture.neighbourChanged (this);
-			Tile tile_to_west = world.getTileAt (X - 1, Y);
-			if (tile_to_west != null && tile_to_west.hasLinkedInstallation())
-				tile_to_west.Furniture.neighbourChanged (this);
+
+		if (this.Furniture.linkedObject) {
+			UpdateLinkedFurnituredTiles ();
 		}
 
 		if (cbFurnitureInstalled != null)
 			cbFurnitureInstalled (this);
+	}
+
+	// trigger onFurnitureChanged for the 4 neighbors if linked
+	void UpdateLinkedFurnituredTiles ()
+	{
+		// Linked object, we need to upgrade neighbours
+		Tile tile_to_north = world.getTileAt (X, Y + 1);
+		if (tile_to_north != null && tile_to_north.hasLinkedInstallation ())
+			tile_to_north.Furniture.neighbourChanged (this);
+		Tile tile_to_east = world.getTileAt (X + 1, Y);
+		if (tile_to_east != null && tile_to_east.hasLinkedInstallation ())
+			tile_to_east.Furniture.neighbourChanged (this);
+		Tile tile_to_south = world.getTileAt (X, Y - 1);
+		if (tile_to_south != null && tile_to_south.hasLinkedInstallation ())
+			tile_to_south.Furniture.neighbourChanged (this);
+		Tile tile_to_west = world.getTileAt (X - 1, Y);
+		if (tile_to_west != null && tile_to_west.hasLinkedInstallation ())
+			tile_to_west.Furniture.neighbourChanged (this);
+	}
+
+	public void uninstallFurniture ()
+	{
+		this.Furniture.uninstall ();
+		bool linked = this.Furniture.linkedObject;
+		this.Furniture = null;
+		if (linked) {
+			UpdateLinkedFurnituredTiles ();
+		}
+
 	}
 
 	public List<Tile> getConnected ()
@@ -122,7 +139,6 @@ public class Tile  {
 			connectedTiles.Add(world.getTileAt(X,   Y+1));
 		if (X < world.Width-1 && Y < world.Height-1)
 			connectedTiles.Add(world.getTileAt(X+1, Y+1));
-
 
 		return connectedTiles;
 	}
@@ -171,7 +187,7 @@ public class Tile  {
 
 	public bool isInstalled ()
 	{
-		return Furniture != null;
+		return this.Furniture != null;
 	}
 
 	public bool hasJob ()

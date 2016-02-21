@@ -60,9 +60,10 @@ public class FurnitureSpritesView : MonoBehaviour
 				furn_go.AddComponent<SpriteRenderer> ();
 				furnitureToGameObjectMap [furn] = furn_go;
 
-				furn.registerOnChangeCallback (onFurnitureChanged);
+				furn.RegisterOnChangeCallback (onFurnitureChanged);
 				onFurnitureChanged (furn); // call it once to do the first sprite set
 
+				furn.RegisterOnUnInstallCallback (onFurnitureUninstall);
 			});
 		}
 	}
@@ -80,6 +81,19 @@ public class FurnitureSpritesView : MonoBehaviour
 	{
 		GameObject go = furnitureToGameObjectMap [furn];
 		go.GetComponent<SpriteRenderer> ().sprite = getSpriteForFurniture (furn);
+	}
+
+	void onFurnitureUninstall (Furniture furn)
+	{
+		if (furnitureToGameObjectMap.ContainsKey (furn) == false) {
+			Debug.Log ("Furn removal called an extra time!");
+			return;
+		}
+		GameObject go = furnitureToGameObjectMap [furn];
+		furn.UnRegisterOnChangeCallback (onFurnitureChanged);
+		furn.UnRegisterOnUnInstallCallback (onFurnitureUninstall);
+		furnitureToGameObjectMap.Remove (furn);
+		Destroy (go);
 	}
 
 	Sprite getSpriteForFurniture (Furniture furn)

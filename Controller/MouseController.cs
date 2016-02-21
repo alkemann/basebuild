@@ -124,6 +124,9 @@ public class MouseController : MonoBehaviour
 		case MenuController.COMMANDS.BUILD_FURNITURE:
 			WorldController.Instance.world.createInstallJobAt (WorldController.Instance.installFurnitureType, x, y);
 			break;
+		case MenuController.COMMANDS.REMOVE_FURNITURE:
+			WorldController.Instance.world.createUninstallJobAt (x, y);
+			break;
 		case MenuController.COMMANDS.MOVE:
 			WorldController.Instance.world.createMoveJobAt (x, y);
 			break;

@@ -13,6 +13,7 @@ public class Furniture {
 	public bool linkedObject { get; protected set; }
 
 	Action<Furniture> cbFurnitureChanged;
+	Action<Furniture> cbFurnitureUninstalled;
 
 	float coolDown = 0f;
 
@@ -33,6 +34,11 @@ public class Furniture {
 		}
 	}
 
+	public static float GetCost(Furniture.TYPE type)
+	{
+		return Furniture.costs [(int) type];
+	}
+
 	void terminalTrigger(float time)
 	{
 		coolDown -= time;
@@ -43,14 +49,35 @@ public class Furniture {
 		}
 	}
 
+	public void uninstall ()
+	{
+		if (cbFurnitureUninstalled != null)
+			cbFurnitureUninstalled (this);
+	}
+
 	public float costToBuild()
 	{
 		return Furniture.costs [(int) this.type];
 	}
 
-	public void registerOnChangeCallback (Action<Furniture> cb)
+	public void RegisterOnChangeCallback (Action<Furniture> cb)
 	{
 		cbFurnitureChanged += cb;
+	}
+
+	public void UnRegisterOnChangeCallback (Action<Furniture> cb)
+	{
+		cbFurnitureChanged -= cb;
+	}
+
+	public void RegisterOnUnInstallCallback (Action<Furniture> cb)
+	{
+		cbFurnitureUninstalled += cb;
+	}
+
+	public void UnRegisterOnUnInstallCallback (Action<Furniture> cb)
+	{
+		cbFurnitureUninstalled -= cb;
 	}
 
 	public void neighbourChanged(Tile neighbour)

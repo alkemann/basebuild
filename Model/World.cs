@@ -110,7 +110,6 @@ public class World {
 		job.registerOnCompleteCallback ((j) => {
 			Tile job_tile = j.tile;
 			job_tile.installFurniture(new Furniture (job_tile, type));
-			job_tile.setJob(null); // remove the job from tile
 			if (cbTileChanged != null)
 				cbTileChanged(job_tile);
 		});
@@ -136,13 +135,35 @@ public class World {
 		return job;
 	}
 
-	public Job createCustomJobAt(int x, int y, float workload, Job.TYPE type) {
-
+	public Job createCustomJobAt(int x, int y, float workload, Job.TYPE type)
+	{
 		Tile tile = tiles [x, y];
 		if (tile.hasJob () || tile.isWalkable() == false)
 			return null;
 		Job job = new Job (tile, workload, type);
 		jobs.Add (job);
+		if (cbJobCreated != null)
+			cbJobCreated (job);
+		return job;
+	}
+
+	public Job createUninstallJobAt (int x, int y)
+	{
+		Tile tile = tiles [x, y];
+		if (tile.hasJob () || tile.isInstalled() == false)
+			return null;
+
+
+		Job job = new Job (tile, Furniture.GetCost (tile.Furniture.type) * 0.5f, Job.TYPE.UNINSTALL); // TODO better placement of uninstall cost
+		jobs.Add (job);
+
+		job.registerOnCompleteCallback ((j) => {
+			Tile job_tile = j.tile;
+			job_tile.uninstallFurniture();
+			if (cbTileChanged != null)
+				cbTileChanged(job_tile);
+		});
+
 		if (cbJobCreated != null)
 			cbJobCreated (job);
 		return job;
