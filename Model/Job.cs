@@ -23,9 +23,9 @@ public class Job {
 		this.type = type;
 	}
 
-	public bool ShouldWorkerStandOnTile()
+	public bool ShouldWorkerNextToTile()
 	{
-		return this.type == TYPE.MOVE || this.type == TYPE.TERMINAL_WORK || this.type == TYPE.NONE;
+		return this.type == TYPE.CONSTRUCT || this.type == TYPE.INSTALL || this.type == TYPE.UNINSTALL;
 	}
 
 	public void cancel()
