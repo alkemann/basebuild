@@ -68,6 +68,13 @@ public class Worker {
 				// Move to next tile in path
 				currentlyMovingTo = travelPath.Pop();
 
+				// if the next tile is the work tile and we should not work ON tile, stop now:
+				if (job != null && currentlyMovingTo == job.tile && job.ShouldWorkerNextToTile ()) {
+					destinationTile = currentlyMovingTo = currentTile;
+					// reach destination
+					if (cbStateChange != null)
+						cbStateChange (this);
+				}
 
 				// FIXME: how can we look for new path if the path
 				// we originally planned is no longer valid?
@@ -104,13 +111,11 @@ public class Worker {
 
 	void workForSomeTime (float deltaTime)
 	{
-		if (job.tile == null || currentTile == job.tile) {
+		if (isMoving() == false) {
 			bool work_done = job.doWork (deltaTime * work_speed);
 			if (work_done) {
 				workCompleted ();
 			}
-		} else {
-			setDestination (job);
 		}
 	}
 
@@ -126,11 +131,6 @@ public class Worker {
 		return destinationTile != currentTile;
 	}
 
-	public bool isWorking ()
-	{
-		return job != null && !isMoving ();
-	}
-
 //	public bool isWorking ()
 //	{
 //		return job != null && !isMoving ();
@@ -139,13 +139,16 @@ public class Worker {
 	public void setJob(Job job)
 	{
 		this.job = job;
+		if (job != null)
+			setDestination (job);
 		if (cbStateChange != null)
 			cbStateChange (this);
 	}
 
 	public void setDestination(Job job)
 	{
-		setDestination (job.tile);
+		if (job.tile != null)
+			setDestination (job.tile);
 	}
 
 	public void setDestination(Tile tile)

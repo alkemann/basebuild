@@ -48,7 +48,7 @@ namespace Path {
 				// get connected tiles
 				foreach (Tile connected in tile.getConnected()) {
 					// neighbor is not in space or not passable, add edge to it
-					if (connected.type == Tile.TYPE.FLOOR) {
+					if (connected.isWalkable()) {
 						edges.Add (
 							new Edge<Tile> (
 								nodes[connected],

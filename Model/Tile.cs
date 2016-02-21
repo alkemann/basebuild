@@ -162,9 +162,7 @@ public class Tile  {
 
 	public float costToEnterFrom (int x, int y)
 	{
-		if (this.Furniture != null && this.Furniture.type == Furniture.TYPE.WALL) {
-			return 50f;
-		} else if (x != X && y != Y) // diagonally
+		if (x != X && y != Y) // diagonally
 			return 1.001f;
 		else
 			return 1f; // TODO: better movement cost
