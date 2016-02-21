@@ -44,15 +44,15 @@ public class WorkerSpritesView : MonoBehaviour {
 //		worker.registerOnStateChangeCallback (onWorkerStateChanged);
 	}
 
-	void onWorkerStateChanged(Worker worker)
-	{
-//		GameObject go = workerToGameObjectMap [worker];
-		if (worker.isMoving ()) {
-			//moving
-		} else if (worker.isWorking ()) {
-			// working
-		} else {
-			// resting
-		}
-	}
+//	void onWorkerStateChanged(Worker worker)
+//	{
+////		GameObject go = workerToGameObjectMap [worker];
+//		if (worker.isMoving ()) {
+//			//moving
+//		} else if (worker.isWorking ()) {
+//			// working
+//		} else {
+//			// resting
+//		}
+//	}
 }

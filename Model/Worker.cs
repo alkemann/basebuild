@@ -131,6 +131,11 @@ public class Worker {
 		return job != null && !isMoving ();
 	}
 
+//	public bool isWorking ()
+//	{
+//		return job != null && !isMoving ();
+//	}
+
 	public void setJob(Job job)
 	{
 		this.job = job;
