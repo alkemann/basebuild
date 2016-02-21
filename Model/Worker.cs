@@ -15,7 +15,6 @@ public class Worker {
 		}
 	}
 
-	Tile cameFrom;
 	Tile currentTile;
 	Tile destinationTile;
 	float movementPercentage;
@@ -59,7 +58,6 @@ public class Worker {
 		float percThisFrame = distThisFrame / distToTravel;
 		movementPercentage += percThisFrame;
 		if (movementPercentage >= 1) {
-			cameFrom = currentTile;
 			currentTile = currentlyMovingTo;
 			movementPercentage = 0;
 			if (currentTile == destinationTile) {
@@ -121,34 +119,6 @@ public class Worker {
 		if (job.tile != null)
 			job.tile.setJob (null);
 		setJob (null);
-		// At this point, I want to make sure no references exist to
-		// the Job, and have it garbage collected.
-		if (currentTile.isWalkable () == false) {
-			// The tile the worker completed work in
-			// is nolonger safe, is the one they came from
-			// safe?
-			moveToSaferTile ();
-		}
-	}
-
-	void moveToSaferTile ()
-	{
-		if (cameFrom.isPassable ()) {
-			currentTile = destinationTile = currentlyMovingTo = cameFrom;
-		}
-		else {
-			// TODO look for another safe til to move to
-			// try to go in the same general diretion?
-			List<Tile> neighbors = currentTile.getConnected ();
-			foreach (Tile t in neighbors) {
-				if (t.isWalkable () && t.hasJob () == false) {
-					//setDestination (t); // TODO should i teleport out?
-					currentTile = destinationTile = currentlyMovingTo = t;
-					return;
-					// hmm assuming nothing below needs to work
-				}
-			}
-		}
 	}
 
 	public bool isMoving ()
