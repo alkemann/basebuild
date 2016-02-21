@@ -115,6 +115,9 @@ public class MouseController : MonoBehaviour
 			// TODO: Bulldoze should come with checks and costs
 			WorldController.Instance.buildTile (Tile.TYPE.EMPTY, x, y);
 			break;
+		case MenuController.COMMANDS.CANCEL:
+			WorldController.Instance.world.cancelJobAt (x, y);
+			break;
 		case MenuController.COMMANDS.CONSTRUCT_TILE:
 			WorldController.Instance.buildTile (WorldController.Instance.constructTileType, x, y);
 			break;

@@ -148,6 +148,19 @@ public class World {
 		return job;
 	}
 
+	public void cancelJobAt (int x, int y)
+	{
+		Tile tile = tiles [x, y];
+		if (tile.hasJob () == false)
+			return;
+		Job job = tile.job;
+		tile.setJob (null);
+		if (jobs.Contains (job) == false)
+			return;
+		jobs.remove(job);
+		job.cancel ();
+	}
+
 	public Job getNearestJob (int x, int y)
 	{
 		return jobs.getNearestJob (x, y);

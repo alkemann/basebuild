@@ -23,6 +23,13 @@ public class Job {
 		this.type = type;
 	}
 
+	public void cancel()
+	{
+		if (cbOnCancel != null) {
+			cbOnCancel (this);
+		}
+	}
+
 	public bool doWork(float work)
 	{
 		if (this.work <= 0) {

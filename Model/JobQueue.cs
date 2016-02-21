@@ -15,10 +15,20 @@ public class JobQueue {
 		return jobQueue.Count;
 	}
 
+	public bool Contains(Job job)
+	{
+		return jobQueue.Contains (job);
+	}
+
 	public bool Add(Job job)
 	{
 		jobQueue.Add(job);
 		return true; // TODO maybe return false if queue is full
+	}
+
+	public void remove (Job job)
+	{
+		jobQueue.Remove (job);
 	}
 
 	public Job getNearestJob(int x, int y)

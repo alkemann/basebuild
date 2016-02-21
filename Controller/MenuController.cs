@@ -9,6 +9,7 @@ public class MenuController : MonoBehaviour {
 	{
 		NONE,
 		BULLDOZE,
+		CANCEL,
 		CONSTRUCT_TILE,
 		BUILD_FURNITURE,
 		MOVE
@@ -29,6 +30,9 @@ public class MenuController : MonoBehaviour {
 			break;
 		case "bulldoze":
 			wc.activity = COMMANDS.BULLDOZE;
+			break;
+		case "cancel":
+			wc.activity = COMMANDS.CANCEL;
 			break;
 		case "construct":
 			wc.activity = COMMANDS.CONSTRUCT_TILE;
