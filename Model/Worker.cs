@@ -151,6 +151,16 @@ public class Worker {
 		}
 	}
 
+	public string GetMovementSpeed ()
+	{
+		return walk_speed.ToString ();
+	}
+
+	public string GetWorkSpeed()
+	{
+		return work_speed.ToString ();
+	}
+
 	public bool isMoving ()
 	{
 		return destinationTile != currentTile;

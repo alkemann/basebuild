@@ -39,6 +39,9 @@ public class WorkerSpritesView : MonoBehaviour {
 		go.transform.SetParent (character_parent.transform);
 		workerToGameObjectMap [worker] = go;
 
+		// Register the worker with the Selection logic
+		go.GetComponent<SelectWorker>().SetWorker(worker);
+
 		int sprite_id = (int) Mathf.Round (Random.Range (0, spriteMap.Count));
 		go.GetComponent<SpriteRenderer> ().sprite = spriteMap [ sprite_id ];
 //		worker.registerOnStateChangeCallback (onWorkerStateChanged);
