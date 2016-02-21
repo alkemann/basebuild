@@ -86,7 +86,8 @@ public class FurnitureSpritesView : MonoBehaviour
 	void onFurnitureUninstall (Furniture furn)
 	{
 		if (furnitureToGameObjectMap.ContainsKey (furn) == false) {
-			Debug.Log ("Furn removal called an extra time!");
+//			Debug.Log ("Furn removal called an extra time!");
+			// FIXME: Figure out why i am called twice for each furniture being removed
 			return;
 		}
 		GameObject go = furnitureToGameObjectMap [furn];
