@@ -53,6 +53,8 @@ public class Furniture {
 	{
 		if (cbFurnitureUninstalled != null)
 			cbFurnitureUninstalled (this);
+		cbFurnitureUninstalled = null;
+		cbFurnitureChanged = null;
 	}
 
 	public float costToBuild()

@@ -127,11 +127,6 @@ public class World {
 		jobs.Add (job);
 		if (cbJobCreated != null)
 			cbJobCreated (job);
-
-		// TODO was this needed?
-//		job.registerOnCompleteCallback ((j) => {
-//			tile.setJob(null); // remove the job from tile
-//		});
 		return job;
 	}
 

@@ -178,9 +178,14 @@ public class Tile  {
 		cbFurnitureInstalled += cb;
 	}
 
+	public void UnregisterOnFurnitureInstalled (Action<Tile> cb)
+	{
+		cbFurnitureInstalled -= cb;
+	}
+
 	public override string ToString ()
 	{
-		return string.Format ("[Tile: type={0}, x={1}, y={2}]", type, X, Y);
+		return string.Format ("[Tile: type={0}, x={1}, y={2}]  [{3}]", type, X, Y, this.GetHashCode());
 	}
 
 	public bool isInstalled ()

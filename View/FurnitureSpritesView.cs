@@ -11,6 +11,7 @@ public class FurnitureSpritesView : MonoBehaviour
 	public GameObject job_prefab;
 	public GameObject furnitures_parent;
 	public GameObject jobs_parent;
+	public GameObject furn_prefab;
 
 	void Start ()
 	{
@@ -51,20 +52,7 @@ public class FurnitureSpritesView : MonoBehaviour
 		// If the job is an install type, get ready to create visualization for
 		// the furniture when it is installed
 		if (job.type == Job.TYPE.INSTALL) {
-			tile.registerOnFurnitureInstalled ((Tile t) => {
-				Furniture furn = t.Furniture;
-				GameObject furn_go = new GameObject ();
-				furn_go.name = "Furn_" + x + "_" + y;
-				furn_go.transform.position = new Vector3 (x, y, -1f);
-				furn_go.transform.SetParent (furnitures_parent.transform, true);
-				furn_go.AddComponent<SpriteRenderer> ();
-				furnitureToGameObjectMap [furn] = furn_go;
-
-				furn.RegisterOnChangeCallback (onFurnitureChanged);
-				onFurnitureChanged (furn); // call it once to do the first sprite set
-
-				furn.RegisterOnUnInstallCallback (onFurnitureUninstall);
-			});
+			tile.registerOnFurnitureInstalled (onFurnitureInstalled);
 		}
 	}
 
@@ -76,7 +64,21 @@ public class FurnitureSpritesView : MonoBehaviour
 		jobToGameObjectMap.Remove (job);
 		SimplePool.Despawn (job_go);
 	}
+	void onFurnitureInstalled(Tile tile) {
+		int x = tile.X;
+		int y = tile.Y;
+		Furniture furn = tile.Furniture;
+		GameObject furn_go = SimplePool.Spawn (furn_prefab, new Vector3 (x, y, -1f), Quaternion.identity);
+		furn_go.name = "Furn_" + x + "_" + y;
+		furn_go.transform.SetParent (furnitures_parent.transform, true);
+		furnitureToGameObjectMap [furn] = furn_go;
 
+		onFurnitureChanged (furn); // call it once to do the first sprite set
+
+		tile.UnregisterOnFurnitureInstalled (onFurnitureInstalled);
+		furn.RegisterOnChangeCallback (onFurnitureChanged);
+		furn.RegisterOnUnInstallCallback (onFurnitureUninstall);
+	}
 	void onFurnitureChanged (Furniture furn)
 	{
 		GameObject go = furnitureToGameObjectMap [furn];
@@ -85,16 +87,11 @@ public class FurnitureSpritesView : MonoBehaviour
 
 	void onFurnitureUninstall (Furniture furn)
 	{
-		if (furnitureToGameObjectMap.ContainsKey (furn) == false) {
-//			Debug.Log ("Furn removal called an extra time!");
-			// FIXME: Figure out why i am called twice for each furniture being removed
-			return;
-		}
-		GameObject go = furnitureToGameObjectMap [furn];
 		furn.UnRegisterOnChangeCallback (onFurnitureChanged);
 		furn.UnRegisterOnUnInstallCallback (onFurnitureUninstall);
+		GameObject furn_go = furnitureToGameObjectMap [furn];
 		furnitureToGameObjectMap.Remove (furn);
-		Destroy (go);
+		SimplePool.Despawn (furn_go);
 	}
 
 	Sprite getSpriteForFurniture (Furniture furn)
