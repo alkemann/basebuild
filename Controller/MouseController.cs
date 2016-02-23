@@ -113,18 +113,18 @@ public class MouseController : MonoBehaviour
 			break;
 		case MenuController.COMMANDS.BULLDOZE:
 			// TODO: Bulldoze should come with checks and costs
-			WorldController.Instance.buildTile (Tile.TYPE.EMPTY, x, y);
+			WorldController.Instance.bulldozeTile (x, y);
 			break;
 		case MenuController.COMMANDS.CANCEL:
 			WorldController.Instance.world.cancelJobAt (x, y);
 			break;
-		case MenuController.COMMANDS.CONSTRUCT_TILE:
-			WorldController.Instance.buildTile (WorldController.Instance.constructTileType, x, y);
+		case MenuController.COMMANDS.FLOOR_TILE:
+			WorldController.Instance.floorTile (x, y);
 			break;
 		case MenuController.COMMANDS.BUILD_FURNITURE:
 			WorldController.Instance.world.createInstallJobAt (WorldController.Instance.installFurnitureType, x, y);
 			break;
-		case MenuController.COMMANDS.REMOVE_FURNITURE:
+		case MenuController.COMMANDS.UNINSTALL_FURNITURE:
 			WorldController.Instance.world.createUninstallJobAt (x, y);
 			break;
 		case MenuController.COMMANDS.MOVE:

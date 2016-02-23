@@ -63,6 +63,19 @@ public class Tile  {
 		return true;
 	}
 
+	public void floor ()
+	{
+		this.type = TYPE.FLOOR;
+	}
+
+	public void bulldoze ()
+	{
+		if (isInstalled ()) {
+			return; // Cant remove floor under furniture
+		}
+		this.type = TYPE.EMPTY;
+	}
+
 	public bool hasWall()
 	{
 		return this.Furniture != null && this.Furniture.type == Furniture.TYPE.WALL;

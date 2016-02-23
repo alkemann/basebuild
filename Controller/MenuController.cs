@@ -10,9 +10,9 @@ public class MenuController : MonoBehaviour {
 		NONE,
 		BULLDOZE,
 		CANCEL,
-		CONSTRUCT_TILE,
+		FLOOR_TILE,
 		BUILD_FURNITURE,
-		REMOVE_FURNITURE,
+		UNINSTALL_FURNITURE,
 		MOVE
 	}
 
@@ -22,7 +22,6 @@ public class MenuController : MonoBehaviour {
 			return;
 		WorldController wc = WorldController.Instance;
 
-		wc.constructTileType = Tile.TYPE.NONE;
 		wc.installFurnitureType = Furniture.TYPE.NONE;
 
 		switch (command_string) {
@@ -36,24 +35,18 @@ public class MenuController : MonoBehaviour {
 			wc.activity = COMMANDS.CANCEL;
 			break;
 		case "construct":
-			wc.activity = COMMANDS.CONSTRUCT_TILE;
+			wc.activity = COMMANDS.FLOOR_TILE;
 			break;
 		case "install":
 			wc.activity = COMMANDS.BUILD_FURNITURE;
 			break;
 		case "uninstall":
-			wc.activity = COMMANDS.REMOVE_FURNITURE;
+			wc.activity = COMMANDS.UNINSTALL_FURNITURE;
 			break;
 		case "move":
 			wc.activity = COMMANDS.MOVE;
 			break;
 		}
-	}
-	public void setTileTypeButton(string type_string)
-	{
-		if (MenuController.active == false)
-			return;
-		WorldController.Instance.constructTileType =getTypeFromString (type_string);
 	}
 
 	public void setFurnitureTypeButton(string type_string)
