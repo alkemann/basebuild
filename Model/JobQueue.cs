@@ -31,6 +31,15 @@ public class JobQueue {
 		jobQueue.Remove (job);
 	}
 
+	/**
+	 * By default prioritizes the job nearest to x,y that can be reached by a worker
+	 * from x,y.
+	 * 
+	 * Added features could be:
+	 *  - priority (high, medium, low or infite levels?
+	 *  - categories (some jobs get natural higher priority?)
+	 *  - profession ( only do certain jobs or priotize them differently )
+	 */
 	public Job getNearestJob(int x, int y)
 	{
 		if (jobQueue.Count == 0)
