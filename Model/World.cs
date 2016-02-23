@@ -8,6 +8,7 @@ public class World {
 	public int Width { get; protected set; }
 	public int Height { get; protected set; }
 
+	List<Worker> workers;
 	Tile[,] tiles;
 
 	public JobQueue jobs;
@@ -27,6 +28,7 @@ public class World {
 
 		Pathfinder = new Finder(this);
 
+		workers = new List<Worker> ();
 		tiles = new Tile[width, height];
 		createTiles (width, height);
 		jobs = new JobQueue ();
@@ -43,6 +45,7 @@ public class World {
 		if (t.type == Tile.TYPE.EMPTY)
 			return; // Cant create workers on empty
 		Worker w = new Worker (t, UnityEngine.Random.Range(4.5f, 7.5f), UnityEngine.Random.Range(0.5f, 5f));
+		workers.Add (w);
 
 		registerOnTick (w.tick); // make sure workers can react to tick
 
@@ -101,6 +104,9 @@ public class World {
 
 	public Job createInstallJobAt (Furniture.TYPE type, int x, int y)
 	{
+		if (this.jobs.Count () >= (this.workers.Count * 10) + 1) {
+			return null;
+		}
 		Tile tile = tiles [x, y];
 		if (tile.isValidInstallation(type) == false || tile.isWalkable() == false)
 			return null;
@@ -120,6 +126,9 @@ public class World {
 
 	public Job createMoveJobAt (int x, int y)
 	{
+		if (this.jobs.Count () >= this.workers.Count * 11) {
+			return null;
+		}
 		Tile tile = tiles [x, y];
 		if (tile.hasJob () || tile.isWalkable () == false)
 			return null;
