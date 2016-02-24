@@ -26,7 +26,7 @@ public class WorldController : MonoBehaviour {
 
 	void Start ()
 	{
-		GetComponentInParent<TileSpritesView> ().renderTiles (world);
+		GetComponentInChildren<TileSpritesView> ().renderTiles (world);
 	}
 
 	public void Update()

@@ -13,7 +13,7 @@ public class WorkerSpritesView : MonoBehaviour {
 	public void Start()
 	{
 		workerToGameObjectMap = new Dictionary<Worker, GameObject> ();
-		GetComponent<WorldController> ().world.registerOnWorkerCreated (onWorkerCreated);
+		WorldController.Instance.world.registerOnWorkerCreated (onWorkerCreated);
 
 		spriteMap = new List<Sprite> ();
 		foreach (Sprite s in Resources.LoadAll<Sprite> ("Images/Characters")) {
