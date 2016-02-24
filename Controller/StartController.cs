@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-public class StartControll : MonoBehaviour {
+public class StartController : MonoBehaviour {
 
 	public GameObject root;
 
