@@ -158,7 +158,7 @@ public class World {
 			return null;
 
 
-		Job job = new Job (tile, Furniture.GetCost (tile.Furniture.type) * 0.5f, Job.TYPE.UNINSTALL); // TODO better placement of uninstall cost
+		Job job = new Job (tile, Furniture.GetCost (tile.furniture.type) * 0.5f, Job.TYPE.UNINSTALL); // TODO better placement of uninstall cost
 		jobs.Add (job);
 
 		job.registerOnCompleteCallback ((j) => {

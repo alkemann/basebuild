@@ -22,7 +22,7 @@ public class SoundsView : MonoBehaviour
 		job.registerOnCompleteCallback ((j) => {
 			switch (j.type) {
 			case Job.TYPE.INSTALL:
-				onFurnitureCreated(j.tile.Furniture);
+				onFurnitureCreated(j.tile.furniture);
 				break;
 			default:
 				// no sournd

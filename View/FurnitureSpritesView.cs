@@ -67,7 +67,7 @@ public class FurnitureSpritesView : MonoBehaviour
 	void onFurnitureInstalled(Tile tile) {
 		int x = tile.X;
 		int y = tile.Y;
-		Furniture furn = tile.Furniture;
+		Furniture furn = tile.furniture;
 		GameObject furn_go = SimplePool.Spawn (furn_prefab, new Vector3 (x, y, -1f), Quaternion.identity);
 		furn_go.name = "Furn_" + x + "_" + y;
 		furn_go.transform.SetParent (furnitures_parent.transform, true);
