@@ -30,6 +30,7 @@ public class Tile  {
 
 	public Job job { get; protected set; }
 	public Furniture furniture { get; protected set; }
+	public Astroid astroid { get; protected set; }
 
 	// inventory
 
@@ -43,6 +44,7 @@ public class Tile  {
 
 	public bool isValidInstallation (Furniture.TYPE furniture_type)
 	{
+		// TODO if astroid, only mine furniture is valid install
 		if (hasJob () || isInstalled() || this.type == Tile.TYPE.EMPTY) {
 			return false;
 		}

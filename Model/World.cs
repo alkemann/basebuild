@@ -19,6 +19,7 @@ public class World {
 	Action<Worker> cbWorkerCreated;
 	Action<Tile> cbTileChanged;
 	Action<Job> cbJobCreated;
+	Action<Astroid> cbAstroidCreated;
 	Action<float> cbTick;
 
 	public World (int width = 100, int height = 100)
@@ -51,6 +52,16 @@ public class World {
 
 		if (cbWorkerCreated != null)
 			cbWorkerCreated (w);
+	}
+
+	public Astroid createAstroidAt (int x, int y)
+	{
+		Tile tile = getTileAt (x, y);
+		Astroid astroid = new Astroid (tile);
+
+		if (cbAstroidCreated != null)
+			cbAstroidCreated (astroid);
+		return astroid;
 	}
 
 	public void tick (float deltaTime)
@@ -201,7 +212,12 @@ public class World {
 		this.jobs.Add (job);
 	}
 
-	public void registOnJobCreated(Action<Job> cb)
+	public void RegisterOnAstroidCreated (Action<Astroid> cb)
+	{
+		cbAstroidCreated += cb;
+	}
+
+	public void registOnJobCreated (Action<Job> cb)
 	{
 		cbJobCreated += cb;
 	}
