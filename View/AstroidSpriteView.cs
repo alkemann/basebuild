@@ -4,10 +4,9 @@ using System.Collections.Generic;
 
 class AstroidSpriteView : MonoBehaviour
 {
-	public GameObject prefab;
-	public GameObject parent;
-
-
+	public GameObject prefab = null;
+	public GameObject parent = null;
+	public Sprite mining = null;
 	Dictionary<Astroid, GameObject> astroidToGameObjectMap;
 
 	void Start ()
@@ -19,19 +18,19 @@ class AstroidSpriteView : MonoBehaviour
 	public void astroidCreated (Astroid astroid)
 	{
 		Tile tile = astroid.tile;
-		int x = tile.X;
-		int y = tile.Y;
-
-		GameObject go = (GameObject)Instantiate(prefab, new Vector3(x, y, -1f), Quaternion.identity);
+		GameObject go = (GameObject)Instantiate(prefab, new Vector3(tile.X, tile.Y, -1f), Quaternion.identity);
 		go.transform.SetParent(parent.transform, true);
-
 		astroidToGameObjectMap[astroid] = go;
-
-		astroid.RegisterOnChangeCallback(onAstroidChange);
+		tile.registerOnFurnitureInstalled(OnAstroidTileChange);
 	}
 
-	public void onAstroidChange (Astroid astroid)
+	public void OnAstroidTileChange (Tile tile)
 	{
 		// FIXME: when mine furniture is installed on astroid, change visual display
+		if (tile.furniture != null && tile.furniture.type == Furniture.TYPE.MINER) {
+			GameObject go = astroidToGameObjectMap[tile.astroid];
+			SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+			sr.sprite = mining;
+		}
 	}
 }

@@ -65,6 +65,13 @@ public class FurnitureSpritesView : MonoBehaviour
 		SimplePool.Despawn (job_go);
 	}
 	void onFurnitureInstalled(Tile tile) {
+		// FIXME: remove and find a better way
+		if (tile.furniture.type == Furniture.TYPE.MINER)
+		{
+			// No gameobject for miner
+			return;
+		}
+
 		int x = tile.X;
 		int y = tile.Y;
 		Furniture furn = tile.furniture;

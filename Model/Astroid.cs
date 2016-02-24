@@ -21,7 +21,7 @@ public class Astroid
 		return mined;
 	}
 
-	public void RegisterOnChangeCallback (Action<Astroid> cb)
+	public void RegisterOnChange (Action<Astroid> cb)
 	{
 		cbOnChange += cb;
 	}

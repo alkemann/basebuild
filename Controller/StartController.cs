@@ -31,6 +31,8 @@ public class StartController : MonoBehaviour {
 		world.buildTileAt (Tile.TYPE.FLOOR, x, y-1);
 		world.buildTileAt (Tile.TYPE.FLOOR, x-1, y-1);
 
+		world.createAstroidAt(55, 55);
+
 		world.getFirstJob();
 		world.unregistOnJobCreated (autoComplete);
 		MenuController.active = true;

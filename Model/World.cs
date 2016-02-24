@@ -58,6 +58,7 @@ public class World {
 	{
 		Tile tile = getTileAt (x, y);
 		Astroid astroid = new Astroid (tile);
+		tile.astroid = astroid;
 
 		if (cbAstroidCreated != null)
 			cbAstroidCreated (astroid);

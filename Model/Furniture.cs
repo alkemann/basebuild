@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System;
 
 public class Furniture {
-	public enum TYPE { NONE, WALL, DOOR, TERMINAL, SPAWNER };
-	public static float[] costs = {0, 2f, 10f, 50f, 100f};
+	public enum TYPE { NONE, WALL, DOOR, TERMINAL, SPAWNER, MINER };
+	public static float[] costs = {0, 2f, 10f, 50f, 100f, 20f};
 
 	public TYPE type { get; protected set; }
 

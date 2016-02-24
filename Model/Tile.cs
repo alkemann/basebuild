@@ -30,7 +30,7 @@ public class Tile  {
 
 	public Job job { get; protected set; }
 	public Furniture furniture { get; protected set; }
-	public Astroid astroid { get; protected set; }
+	public Astroid astroid;
 
 	// inventory
 
