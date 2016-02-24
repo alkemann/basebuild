@@ -44,10 +44,14 @@ public class Tile  {
 
 	public bool isValidInstallation (Furniture.TYPE furniture_type)
 	{
-		// TODO if astroid, only mine furniture is valid install
 		if (hasJob () || isInstalled() || this.type == Tile.TYPE.EMPTY) {
 			return false;
 		}
+
+		if (furniture_type == Furniture.TYPE.MINER) {
+			return astroid != null;
+		}
+
 		if (furniture_type == Furniture.TYPE.DOOR) {
 			Tile tile_to_north = world.getTileAt (X, Y + 1);
 			Tile tile_to_east = world.getTileAt (X + 1, Y);
