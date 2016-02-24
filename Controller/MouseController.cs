@@ -121,7 +121,7 @@ public class MouseController : MonoBehaviour
 		case MenuController.COMMANDS.FLOOR_TILE:
 			WorldController.Instance.floorTile (x, y);
 			break;
-		case MenuController.COMMANDS.BUILD_FURNITURE:
+		case MenuController.COMMANDS.INSTALL_FURNITURE:
 			WorldController.Instance.world.createInstallJobAt (WorldController.Instance.installFurnitureType, x, y);
 			break;
 		case MenuController.COMMANDS.UNINSTALL_FURNITURE:

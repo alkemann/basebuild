@@ -11,7 +11,7 @@ public class MenuController : MonoBehaviour {
 		BULLDOZE,
 		CANCEL,
 		FLOOR_TILE,
-		BUILD_FURNITURE,
+		INSTALL_FURNITURE,
 		UNINSTALL_FURNITURE,
 		MOVE
 	}
@@ -38,7 +38,7 @@ public class MenuController : MonoBehaviour {
 			wc.activity = COMMANDS.FLOOR_TILE;
 			break;
 		case "install":
-			wc.activity = COMMANDS.BUILD_FURNITURE;
+			wc.activity = COMMANDS.INSTALL_FURNITURE;
 			break;
 		case "uninstall":
 			wc.activity = COMMANDS.UNINSTALL_FURNITURE;
