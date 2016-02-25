@@ -5,21 +5,17 @@ public class TileSpritesView : MonoBehaviour {
 
 	public Sprite sprite_empty;
 	public Sprite sprite_floor;
-	public Sprite sprite_wall;
 
 	public GameObject tiles_parent;
 
 	Dictionary<Tile, GameObject> tileToGameObjectMap;
 
-	void Start ()
+	void Start()
 	{
-		tileToGameObjectMap = new Dictionary<Tile, GameObject> ();
-	}
-
-	public void renderTiles (World world)
-	{
-		for (int x = 0; x < WorldController.Instance.world.Width; x++) {
-			for (int y = 0; y < WorldController.Instance.world.Height; y++) {
+		World world = WorldController.Instance.world;
+		tileToGameObjectMap = new Dictionary<Tile, GameObject>();
+		for (int x = 0; x < world.Width; x++) {
+			for (int y = 0; y < world.Height; y++) {
 				createTileSprite (world, x, y);
 			}
 		}

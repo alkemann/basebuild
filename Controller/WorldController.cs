@@ -24,11 +24,6 @@ public class WorldController : MonoBehaviour {
 		Camera.main.transform.position = new Vector3 (WIDTH / 2, HEIGHT / 2, Camera.main.transform.position.z);
 	}
 
-	void Start ()
-	{
-		GetComponentInChildren<TileSpritesView> ().renderTiles (world);
-	}
-
 	public void Update()
 	{
 		world.tick (Time.deltaTime);
