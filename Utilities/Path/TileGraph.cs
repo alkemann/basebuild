@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System;
 
@@ -48,7 +48,7 @@ namespace Path {
 				// get connected tiles
 				foreach (Tile connected in tile.getConnected()) {
 					// neighbor is not in space or not passable, add edge to it
-					if (connected.isWalkable()) {
+					if (connected.isWalkable() && isNotCuttonCorner(tile, connected)) {
 						edges.Add (
 							new Edge<Tile> (
 								nodes[connected],
@@ -59,6 +59,22 @@ namespace Path {
 				}
 				node.edges = edges.ToArray ();
 			}
+		}
+
+		public bool isNotCuttonCorner(Tile from, Tile to)
+		{
+			int dx = from.X - to.X;
+			int dy = from.Y - to.Y;
+
+			// Are we actually moving diagonally?
+			if (Mathf.Abs(dx) + Mathf.Abs(dy) != 2)
+				return true; // No? then not a problem
+
+			// Are both the relevant N/S and E/W tiles open floors?
+			Tile north_south = from.world.getTileAt(from.X, from.Y - dy);
+			Tile east_west = from.world.getTileAt(from.X - dx, from.Y);
+
+			return north_south.isWalkable() && east_west.isWalkable();
 		}
 
 		public override Stack<Tile> search(Tile from, Tile target)
