@@ -210,6 +210,12 @@ public class Tile  {
 		cbFurnitureInstalled -= cb;
 	}
 
+	public void TriggerFurnitureInstalled()
+	{
+		if (cbFurnitureInstalled != null)
+			cbFurnitureInstalled(this);
+	}
+
 	public override string ToString ()
 	{
 		return string.Format ("[Tile: type={0}, x={1}, y={2}]  [{3}]", type, X, Y, this.GetHashCode());
