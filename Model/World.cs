@@ -123,7 +123,7 @@ public class World {
 		if (tile.isValidInstallation(type) == false || tile.isWalkable() == false)
 			return null;
 
-		Job job = new Job(tile, Furniture.costs[(int) type], Job.TYPE.INSTALL);
+		Job job = new Job(tile, Furniture.GetCost(type), Job.TYPE.INSTALL);
 		jobs.Add (job);
 		job.registerOnCompleteCallback ((j) => {
 			Tile job_tile = j.tile;

@@ -2,20 +2,16 @@
 using System.Collections.Generic;
 using System;
 
-public class Furniture {
-	public enum TYPE { NONE, WALL, DOOR, TERMINAL, SPAWNER, MINER };
-	public static float[] costs = {0, 2f, 10f, 50f, 100f, 20f};
+public class Furniture
+{
+	public enum TYPE { NONE, WALL, DOOR, TERMINAL, SPAWNER, MINER, HOPPER, DEPOT, PROCESSOR }
 
 	public TYPE type { get; protected set; }
-
 	public Tile tile { get; protected set; }
-
 	public bool linkedObject { get; protected set; }
 
 	Action<Furniture> cbFurnitureChanged;
 	Action<Furniture> cbFurnitureUninstalled;
-
-	float coolDown = 0f;
 
 
 	public Furniture (Tile tile, TYPE type)
@@ -29,37 +25,29 @@ public class Furniture {
 		}
 		if (type == TYPE.TERMINAL) {
 			// TODO how to cleanly place furniture code like this
-			coolDown = UnityEngine.Random.Range (2f, 3f); // set first cooldown
-			tile.world.registerOnTick (terminalTrigger);
+		}
+		if (type == TYPE.MINER) {
+			// TODO call register tick if u need
 		}
 	}
 
 	public static float GetCost(Furniture.TYPE type)
 	{
-		return Furniture.costs [(int) type];
+		return Behaviours.GetCostByType(type);
 	}
 
-	void terminalTrigger(float time)
+	public float costToBuild ()
 	{
-		coolDown -= time;
-		if (coolDown <= 0) {
-			// Terminal has triggered, lets create a job to force a worker to move here
-			tile.world.createCustomJobAt(tile.X, tile.Y, 5f, Job.TYPE.TERMINAL_WORK);
-			coolDown = UnityEngine.Random.Range (5f, 6f); // reset cooldown
-		}
+		return Behaviours.GetCostByType(this.type);
 	}
 
 	public void uninstall ()
 	{
-		if (cbFurnitureUninstalled != null)
-			cbFurnitureUninstalled (this);
+		if (cbFurnitureUninstalled != null) {
+			cbFurnitureUninstalled(this);
+		}
 		cbFurnitureUninstalled = null;
 		cbFurnitureChanged = null;
-	}
-
-	public float costToBuild()
-	{
-		return Furniture.costs [(int) this.type];
 	}
 
 	public void RegisterOnChangeCallback (Action<Furniture> cb)
