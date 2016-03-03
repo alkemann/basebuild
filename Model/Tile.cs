@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System;
 
@@ -67,6 +67,14 @@ public class Tile  {
 		}
 
 		return true;
+	}
+
+	public void ApplyData (TileData tile_data)
+	{
+		type = (Tile.TYPE) tile_data.type;
+		if (tile_data.furn != 0) {
+			furniture = new Furniture(this, (Furniture.TYPE)tile_data.furn);
+		}
 	}
 
 	public void floor ()

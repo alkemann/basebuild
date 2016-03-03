@@ -1,19 +1,20 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System;
 using Path;
 
-public class World {
+public class World
+{
 
 	public int Width { get; protected set; }
 	public int Height { get; protected set; }
 
-	List<Worker> workers;
-	Tile[,] tiles;
 
 	public JobQueue jobs;
 	public bool pause;
 
+	public List<Worker> workers;
+	public Tile[,] tiles;
 	Finder Pathfinder;
 
 	Action<Worker> cbWorkerCreated;
@@ -26,13 +27,48 @@ public class World {
 	{
 		this.Width = width;
 		this.Height = height;
-
 		Pathfinder = new Finder(this);
+		workers = new List<Worker>();
+		jobs = new JobQueue();
+		tiles = new Tile[Width, Height];
+		createTiles(Width, Height);
+	}
 
-		workers = new List<Worker> ();
-		tiles = new Tile[width, height];
-		createTiles (width, height);
-		jobs = new JobQueue ();
+	public void SetupBlankWorld ()
+	{
+		int x = Height / 2;
+		int y = Width / 2;
+		Tile center_tile = buildTileAt(Tile.TYPE.FLOOR, x, y);
+		center_tile.installFurniture(new Furniture(center_tile, Furniture.TYPE.SPAWNER));
+		if (cbTileChanged != null)
+			cbTileChanged(center_tile);
+		buildTileAt(Tile.TYPE.FLOOR, x + 1, y);
+		buildTileAt(Tile.TYPE.FLOOR, x - 1, y);
+		buildTileAt(Tile.TYPE.FLOOR, x + 1, y + 1);
+		buildTileAt(Tile.TYPE.FLOOR, x, y + 1);
+		buildTileAt(Tile.TYPE.FLOOR, x - 1, y + 1);
+		buildTileAt(Tile.TYPE.FLOOR, x + 1, y - 1);
+		buildTileAt(Tile.TYPE.FLOOR, x, y - 1);
+		buildTileAt(Tile.TYPE.FLOOR, x - 1, y - 1);
+		createAstroidAt(55, 55);
+	}
+
+	public void SetupWorldFromData (SaveGame data)
+	{
+		foreach (TileData tile_data in data.tiles) {
+			Tile tile = tiles[tile_data.x, tile_data.y];
+			tile.ApplyData(tile_data);
+			if (cbTileChanged != null)
+				cbTileChanged(tile);
+		}
+		foreach (WorkerData worker_data in data.workers) {
+			Tile tile = tiles[worker_data.x, worker_data.y];
+			Worker worker = new Worker(tile, worker_data.walk_speed, worker_data.work_speed);
+			workers.Add(worker);
+			if (cbWorkerCreated != null)
+				cbWorkerCreated(worker);
+			registerOnTick(worker.tick); // make sure workers can react to tick
+		}
 	}
 
 	public Stack<Tile> findPath (Tile from, Tile to)

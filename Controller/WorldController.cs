@@ -1,16 +1,22 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class WorldController : MonoBehaviour {
+public class WorldController : MonoBehaviour
+{
 
 	public static WorldController Instance;
+	public static SaveGame saveGame;
+
 	public World world { get; protected set; }
 
 	public MenuController.COMMANDS activity = MenuController.COMMANDS.MOVE;
 	public Furniture.TYPE installFurnitureType = Furniture.TYPE.NONE;
 
+	public GameObject jobsCounter;
 	public int HEIGHT;
 	public int WIDTH;
+
+	private bool worldSetupUp = false;
 
 	public WorldController ()
 	{
@@ -20,20 +26,31 @@ public class WorldController : MonoBehaviour {
 
 	void OnEnable()
 	{
-		world = new World (WIDTH, HEIGHT);
+		if (WorldController.saveGame != null) {
+			WIDTH = saveGame.world.width;
+			HEIGHT = saveGame.world.height;
+		}
+		world = new World(WIDTH, HEIGHT);
 		Camera.main.transform.position = new Vector3 (WIDTH / 2, HEIGHT / 2, Camera.main.transform.position.z);
 	}
 
 	public void Update()
 	{
+		if (worldSetupUp == false)
+			SetupWorld(); // Does this really cost enough to not do it this way?
 		world.tick (Time.deltaTime);
 	}
 
-	public GameObject jobsCounter;
-
-	public void FixedUpdate()
+	protected void SetupWorld()
 	{
-		jobsCounter.GetComponent<Text> ().text = ""+world.jobs.Count ();
+		if (WorldController.saveGame == null) {
+			world.SetupBlankWorld();
+		} else {
+			world.SetupWorldFromData(WorldController.saveGame);
+			WorldController.saveGame = null;
+		}
+		GetComponentInChildren<TileSpritesView>().RenderWorld();
+		worldSetupUp = true;
 	}
 
 	public Tile getTileAt(int x, int y)

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System;
 
@@ -64,7 +64,8 @@ public class FurnitureSpritesView : MonoBehaviour
 		jobToGameObjectMap.Remove (job);
 		SimplePool.Despawn (job_go);
 	}
-	void onFurnitureInstalled(Tile tile) {
+
+	public void onFurnitureInstalled(Tile tile) {
 		// FIXME: remove and find a better way
 		if (tile.furniture.type == Furniture.TYPE.MINER)
 		{
@@ -86,6 +87,7 @@ public class FurnitureSpritesView : MonoBehaviour
 		furn.RegisterOnChangeCallback (onFurnitureChanged);
 		furn.RegisterOnUnInstallCallback (onFurnitureUninstall);
 	}
+
 	void onFurnitureChanged (Furniture furn)
 	{
 		GameObject go = furnitureToGameObjectMap [furn];

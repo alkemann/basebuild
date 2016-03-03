@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System;
 
@@ -9,6 +9,7 @@ public class Worker {
 			return Mathf.Lerp (currentTile.X, currentlyMovingTo.X, movementPercentage);
 		}
 	}
+
 	public float Y {
 		get {
 			return Mathf.Lerp (currentTile.Y, currentlyMovingTo.Y, movementPercentage);
@@ -21,9 +22,9 @@ public class Worker {
 
 	Stack<Tile> travelPath;
 	Tile currentlyMovingTo;
+	public float walk_speed { get; protected set; }
+	public float work_speed { get; protected set; }
 
-	float walk_speed;
-	float work_speed;
 
 	Job job;
 
@@ -34,6 +35,11 @@ public class Worker {
 		currentTile = destinationTile = currentlyMovingTo = tile;
 		this.walk_speed = walk;
 		this.work_speed = work;
+	}
+
+	public Tile GetCurrentTileOfWorker()
+	{
+		return currentTile;
 	}
 
 	public void tick(float deltaTime)

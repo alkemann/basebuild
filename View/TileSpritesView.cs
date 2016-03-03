@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 
 public class TileSpritesView : MonoBehaviour {
@@ -10,7 +10,7 @@ public class TileSpritesView : MonoBehaviour {
 
 	Dictionary<Tile, GameObject> tileToGameObjectMap;
 
-	void Start()
+	public void RenderWorld()
 	{
 		World world = WorldController.Instance.world;
 		tileToGameObjectMap = new Dictionary<Tile, GameObject>();
@@ -51,5 +51,10 @@ public class TileSpritesView : MonoBehaviour {
 
 		tile.registerOnChangeCallback(onTileTypeChanged);
 		onTileTypeChanged(tile); // call it once to do the first sprite set
+
+		if (tile.isInstalled()) {
+			// Lets create the initial furniture as well
+			GetComponent<FurnitureSpritesView>().onFurnitureInstalled(tile);
+		}
 	}
 }
