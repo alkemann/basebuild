@@ -6,11 +6,12 @@ public class Astroid
 {
 	public Tile tile { get; protected set; }
 
-	float resources_left = 100f;
+	public float resources_left { get; protected set; }
 	Action<Astroid> cbOnChange;
 
-	public Astroid (Tile tile)
+	public Astroid (Tile tile, float resources = 100f)
 	{
+		resources_left = resources; // TODO random amount as starting value?
 		this.tile = tile;
 	}
 

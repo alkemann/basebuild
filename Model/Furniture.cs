@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System;
 
@@ -29,8 +29,13 @@ public class Furniture {
 		}
 		if (type == TYPE.TERMINAL) {
 			// TODO how to cleanly place furniture code like this
-			coolDown = UnityEngine.Random.Range (2f, 3f); // set first cooldown
-			tile.world.registerOnTick (terminalTrigger);
+			coolDown = UnityEngine.Random.Range(2f, 3f); // set first cooldown
+			tile.world.registerOnTick(terminalTrigger);
+		}
+		if (type == TYPE.MINER) {
+			// TODO how to cleanly place furniture code like this
+			coolDown = UnityEngine.Random.Range(10f, 15f); // set first cooldown
+			tile.world.registerOnTick(minerTrigger);
 		}
 	}
 
@@ -39,13 +44,23 @@ public class Furniture {
 		return Furniture.costs [(int) type];
 	}
 
-	void terminalTrigger(float time)
+	void terminalTrigger (float time)
 	{
 		coolDown -= time;
 		if (coolDown <= 0) {
 			// Terminal has triggered, lets create a job to force a worker to move here
 			tile.world.createCustomJobAt(tile.X, tile.Y, 5f, Job.TYPE.TERMINAL_WORK);
-			coolDown = UnityEngine.Random.Range (5f, 6f); // reset cooldown
+			coolDown = UnityEngine.Random.Range(5f, 6f); // reset cooldown
+		}
+	}
+
+	void minerTrigger (float time)
+	{
+		coolDown -= time;
+		if (coolDown <= 0) {
+			// Terminal has triggered, lets create a job to force a worker to move here
+			tile.world.createCustomJobAt(tile.X, tile.Y, 5f, Job.TYPE.MINER_WORK);
+			coolDown = UnityEngine.Random.Range(10f, 15f); // reset cooldown
 		}
 	}
 

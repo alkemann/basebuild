@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 
 public class Job {
 
-	public enum TYPE { NONE, MOVE, CONSTRUCT, INSTALL, UNINSTALL, TERMINAL_WORK }
+	public enum TYPE { NONE, MOVE, CONSTRUCT, INSTALL, UNINSTALL, TERMINAL_WORK, MINER_WORK
+	}
 
 	public TYPE type { get; protected set; }
 	public Tile tile { get; protected set; }
@@ -25,7 +26,7 @@ public class Job {
 
 	public bool ShouldWorkerNextToTile()
 	{
-		return this.type == TYPE.CONSTRUCT || this.type == TYPE.INSTALL || this.type == TYPE.UNINSTALL;
+		return this.type == TYPE.CONSTRUCT || this.type == TYPE.INSTALL || this.type == TYPE.UNINSTALL || this.type == TYPE.MINER_WORK;
 	}
 
 	public void cancel()
