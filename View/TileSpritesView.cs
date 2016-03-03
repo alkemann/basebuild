@@ -16,7 +16,7 @@ public class TileSpritesView : MonoBehaviour {
 		tileToGameObjectMap = new Dictionary<Tile, GameObject>();
 		for (int x = 0; x < world.Width; x++) {
 			for (int y = 0; y < world.Height; y++) {
-				createTileSprite (world, x, y);
+				createTileSprite(world, x, y);
 			}
 		}
 	}

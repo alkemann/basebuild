@@ -73,31 +73,30 @@ public class World
 
 	public Stack<Tile> findPath (Tile from, Tile to)
 	{
-		return Pathfinder.findPath (from, to);
+		return Pathfinder.findPath(from, to);
 	}
 
-	public void createWorkerAt(int x, int y)
+	public void createWorkerAt (int x, int y)
 	{
-		Tile t = tiles [x, y];
+		Tile t = tiles[x, y];
 		if (t.type == Tile.TYPE.EMPTY)
 			return; // Cant create workers on empty
-		Worker w = new Worker (t, UnityEngine.Random.Range(4.5f, 7.5f), UnityEngine.Random.Range(0.5f, 5f));
-		workers.Add (w);
-
-		registerOnTick (w.tick); // make sure workers can react to tick
+		Worker w = new Worker(t, UnityEngine.Random.Range(4.5f, 7.5f), UnityEngine.Random.Range(0.5f, 5f));
+		workers.Add(w);
+		registerOnTick(w.tick); // make sure workers can react to tick
 
 		if (cbWorkerCreated != null)
-			cbWorkerCreated (w);
+			cbWorkerCreated(w);
 	}
 
 	public Astroid createAstroidAt (int x, int y)
 	{
-		Tile tile = getTileAt (x, y);
-		Astroid astroid = new Astroid (tile);
+		Tile tile = getTileAt(x, y);
+		Astroid astroid = new Astroid(tile);
 		tile.astroid = astroid;
 
 		if (cbAstroidCreated != null)
-			cbAstroidCreated (astroid);
+			cbAstroidCreated(astroid);
 		return astroid;
 	}
 
@@ -106,7 +105,7 @@ public class World
 		if (pause)
 			return;
 		if (cbTick != null) {
-			cbTick (deltaTime);
+			cbTick(deltaTime);
 		}
 	}
 
@@ -119,12 +118,12 @@ public class World
 	{
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				tiles [x, y] = new Tile (this, x, y);
+				tiles[x, y] = new Tile(this, x, y);
 			}
 		}
 	}
 
-	public Tile getTileAt(int x, int y)
+	public Tile getTileAt (int x, int y)
 	{
 		if (x < 0 || x >= Width) {
 			return null;
@@ -134,82 +133,83 @@ public class World
 			// throw new Exception ("y is out of map scope");
 		}
 		try {
-			return tiles[x,y];
+			return tiles[x, y];
 		} catch (IndexOutOfRangeException e) {
-			Debug.LogError( string.Format( " Trying to access {0},{1}", x, y ));
-			Debug.Log (e.StackTrace);
+			Debug.LogError(string.Format(" Trying to access {0},{1}", x, y));
+			Debug.Log(e.StackTrace);
 			return null;
 		}
 	}
 
-	public void buildTileAt (Tile.TYPE buildMode, int x, int y)
+	public Tile buildTileAt (Tile.TYPE buildMode, int x, int y)
 	{
-		Tile tile = tiles [x, y];
+		Tile tile = tiles[x, y];
 		tile.type = buildMode;
 		if (cbTileChanged != null)
-			cbTileChanged (tile);
+			cbTileChanged(tile);
+		return tile;
 	}
 
 	public Job createInstallJobAt (Furniture.TYPE type, int x, int y)
 	{
-		if (this.jobs.Count () >= (this.workers.Count * 10) + 1) {
+		if (this.jobs.Count() >= (this.workers.Count * 10) + 1) {
 			return null;
 		}
-		Tile tile = tiles [x, y];
+		Tile tile = tiles[x, y];
 		if (tile.isValidInstallation(type) == false || tile.isWalkable() == false)
 			return null;
 
-		Job job = new Job(tile, Furniture.costs[(int) type], Job.TYPE.INSTALL);
-		jobs.Add (job);
-		job.registerOnCompleteCallback ((j) => {
+		Job job = new Job(tile, Furniture.costs[(int)type], Job.TYPE.INSTALL);
+		jobs.Add(job);
+		job.registerOnCompleteCallback((j) => {
 			Tile job_tile = j.tile;
-			job_tile.installFurniture(new Furniture (job_tile, type));
+			job_tile.installFurniture(new Furniture(job_tile, type));
 			if (cbTileChanged != null)
 				cbTileChanged(job_tile);
 		});
 		if (cbJobCreated != null)
-			cbJobCreated (job);
+			cbJobCreated(job);
 		return job;
 	}
 
 	public Job createMoveJobAt (int x, int y)
 	{
-		if (this.jobs.Count () >= this.workers.Count * 11) {
+		if (this.jobs.Count() >= this.workers.Count * 11) {
 			return null;
 		}
-		Tile tile = tiles [x, y];
-		if (tile.hasJob () || tile.isWalkable () == false)
+		Tile tile = tiles[x, y];
+		if (tile.hasJob() || tile.isWalkable() == false)
 			return null;
-		Job job = new Job (tile, 0.01f, Job.TYPE.MOVE);
-		jobs.Add (job);
+		Job job = new Job(tile, 0.01f, Job.TYPE.MOVE);
+		jobs.Add(job);
 		if (cbJobCreated != null)
-			cbJobCreated (job);
+			cbJobCreated(job);
 		return job;
 	}
 
-	public Job createCustomJobAt(int x, int y, float workload, Job.TYPE type)
+	public Job createCustomJobAt (int x, int y, float workload, Job.TYPE type)
 	{
-		Tile tile = tiles [x, y];
-		if (tile.hasJob () || tile.isWalkable() == false)
+		Tile tile = tiles[x, y];
+		if (tile.hasJob() || tile.isWalkable() == false)
 			return null;
-		Job job = new Job (tile, workload, type);
-		jobs.Add (job);
+		Job job = new Job(tile, workload, type);
+		jobs.Add(job);
 		if (cbJobCreated != null)
-			cbJobCreated (job);
+			cbJobCreated(job);
 		return job;
 	}
 
 	public Job createUninstallJobAt (int x, int y)
 	{
-		Tile tile = tiles [x, y];
-		if (tile.hasJob () || tile.isInstalled() == false)
+		Tile tile = tiles[x, y];
+		if (tile.hasJob() || tile.isInstalled() == false)
 			return null;
 
 
-		Job job = new Job (tile, Furniture.GetCost (tile.furniture.type) * 0.5f, Job.TYPE.UNINSTALL); // TODO better placement of uninstall cost
-		jobs.Add (job);
+		Job job = new Job(tile, Furniture.GetCost(tile.furniture.type) * 0.5f, Job.TYPE.UNINSTALL); // TODO better placement of uninstall cost
+		jobs.Add(job);
 
-		job.registerOnCompleteCallback ((j) => {
+		job.registerOnCompleteCallback((j) => {
 			Tile job_tile = j.tile;
 			job_tile.uninstallFurniture();
 			if (cbTileChanged != null)
@@ -217,36 +217,36 @@ public class World
 		});
 
 		if (cbJobCreated != null)
-			cbJobCreated (job);
+			cbJobCreated(job);
 		return job;
 	}
 
 	public void cancelJobAt (int x, int y)
 	{
-		Tile tile = tiles [x, y];
-		if (tile.hasJob () == false)
+		Tile tile = tiles[x, y];
+		if (tile.hasJob() == false)
 			return;
 		Job job = tile.job;
-		tile.setJob (null);
-		if (jobs.Contains (job) == false)
+		tile.setJob(null);
+		if (jobs.Contains(job) == false)
 			return;
 		jobs.remove(job);
-		job.cancel ();
+		job.cancel();
 	}
 
 	public Job getNearestJob (int x, int y)
 	{
-		return jobs.getNearestJob (x, y);
+		return jobs.getNearestJob(x, y);
 	}
 
 	public Job getFirstJob ()
 	{
-		return jobs.getFirstJob ();
+		return jobs.getFirstJob();
 	}
 
 	public void putJobBack (Job job)
 	{
-		this.jobs.Add (job);
+		this.jobs.Add(job);
 	}
 
 	public void RegisterOnAstroidCreated (Action<Astroid> cb)
@@ -264,7 +264,7 @@ public class World
 		cbJobCreated -= cb;
 	}
 
-	public void registerOnWorkerCreated(Action<Worker> cb)
+	public void registerOnWorkerCreated (Action<Worker> cb)
 	{
 		cbWorkerCreated += cb;
 	}
