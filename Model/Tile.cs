@@ -75,6 +75,9 @@ public class Tile  {
 		if (tile_data.furn != 0) {
 			furniture = new Furniture(this, (Furniture.TYPE)tile_data.furn);
 		}
+		if (tile_data.astroid != null) {
+			this.astroid = new Astroid(this, tile_data.astroid.val);
+		}
 	}
 
 	public void floor ()

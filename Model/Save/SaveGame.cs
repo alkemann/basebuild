@@ -18,11 +18,6 @@ public class SaveGame
 	[XmlArray("tiles")]
 	[XmlArrayItem("tile")]
 	public List<TileData> tiles;
-
-	[XmlArray("astroids")]
-	[XmlArrayItem("astroid")]
-	public List<AstroidData> astroids;
-
 	// TODO Save job queue?
 
 	public void Save (World world, string name = "SaveGameQuick")
@@ -33,14 +28,10 @@ public class SaveGame
 			workers.Add(new WorkerData(worker));
 		}
 
-		astroids = new List<AstroidData>(1);
 		tiles = new List<TileData>(10);
 		foreach (Tile tile in world.tiles) {
 			if (tile.isInstalled() || tile.isWalkable())
 				tiles.Add(new TileData(tile));
-			if (tile.astroid != null) {
-				astroids.Add(new AstroidData(tile.astroid));
-			}
 		}
 
 		XmlSerializer serializer = new XmlSerializer(typeof(SaveGame));

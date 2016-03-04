@@ -56,21 +56,13 @@ public class World
 
 	public void SetupWorldFromData (SaveGame data)
 	{
-
 		foreach (TileData tile_data in data.tiles) {
 			Tile tile = tiles[tile_data.x, tile_data.y];
 			tile.ApplyData(tile_data);
 			if (cbTileChanged != null)
 				cbTileChanged(tile);
-		}
-
-		foreach (AstroidData astroid_data in data.astroids) {
-			Tile tile = tiles[astroid_data.x, astroid_data.y];
-			tile.astroid = new Astroid(tile, astroid_data.val);
-			if (cbAstroidCreated != null)
+			if (tile.astroid != null && cbAstroidCreated != null)
 				cbAstroidCreated(tile.astroid);
-			if (tile.furniture != null && tile.furniture.type == Furniture.TYPE.MINER)
-				tile.TriggerFurnitureInstalled();
 		}
 
 		foreach (WorkerData worker_data in data.workers) {

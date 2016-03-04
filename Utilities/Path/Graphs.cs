@@ -39,6 +39,14 @@ namespace Path {
 			Func<T, T, int> heuristic_cost_estimate
 		)
 		{
+			if (nodes.ContainsKey(from) == false) {
+				Debug.LogError("From node missing from nodes available to path!");
+				Debug.Log(from);
+			}
+			if (nodes.ContainsKey(target) == false) {
+				Debug.LogError("Target node missing from nodes available to path!");
+				Debug.Log(target);
+			}
 			Node<T> start = nodes [from];
 			Node<T> goal = nodes [target];
 			PriorityQueue<Node<T>> frontier = new PriorityQueue<Node<T>>();
