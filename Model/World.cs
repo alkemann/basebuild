@@ -63,6 +63,8 @@ public class World
 				cbTileChanged(tile);
 			if (tile.astroid != null && cbAstroidCreated != null)
 				cbAstroidCreated(tile.astroid);
+			if (tile.furniture != null && tile.furniture.type == Furniture.TYPE.MINER)
+				tile.TriggerFurnitureInstalled();
 		}
 
 		foreach (WorkerData worker_data in data.workers) {
