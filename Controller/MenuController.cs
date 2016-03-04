@@ -4,6 +4,8 @@ using System.Collections;
 public class MenuController : MonoBehaviour
 {
 
+	bool isMute;
+
 	public enum COMMANDS
 	{
 		NONE,
@@ -85,4 +87,9 @@ public class MenuController : MonoBehaviour
 		WorldController.Instance.world.pause = !WorldController.Instance.world.pause;
 	}
 
+	public void Mute ()
+	{
+		isMute = !isMute;
+		AudioListener.volume = isMute ? 0 : 1;
+	}
 }
