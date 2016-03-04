@@ -207,19 +207,32 @@ public class World
 
 	public Job createUninstallJobAt (int x, int y)
 	{
-		Tile tile = tiles[x, y];
-		if (tile.hasJob() || tile.isInstalled() == false)
+		Tile tile_with_furn = tiles[x, y];
+		if (tile_with_furn.hasJob() || tile_with_furn.isInstalled() == false)
 			return null;
 
+		Tile tile_for_job = tile_with_furn;
+		if (tile_for_job.isPassable() == false) {
+			// We can not move TO the tile to accomplish job,
+			// we must go to adjacent
+			List<Tile> neighs = tile_for_job.getConnected();
+			foreach (Tile neigh in neighs) {
+				if (neigh.isWalkable()) {
+					tile_for_job = neigh;
+					break;
+				}
+			}
+		}
 
-		Job job = new Job(tile, Furniture.GetCost(tile.furniture.type) * 0.5f, Job.TYPE.UNINSTALL); // TODO better placement of uninstall cost
+		Job job = new Job(tile_for_job, Furniture.GetCost(tile_with_furn.furniture.type) * 0.5f, Job.TYPE.UNINSTALL); // TODO better placement of uninstall cost
 		jobs.Add(job);
 
 		job.registerOnCompleteCallback((j) => {
-			Tile job_tile = j.tile;
-			job_tile.uninstallFurniture();
+			// Specifically do not use job tile since furniture
+			// may be installed on adjacent tile
+			tile_with_furn.uninstallFurniture();
 			if (cbTileChanged != null)
-				cbTileChanged(job_tile);
+				cbTileChanged(tile_with_furn);
 		});
 
 		if (cbJobCreated != null)

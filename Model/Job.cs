@@ -26,7 +26,7 @@ public class Job {
 
 	public bool ShouldWorkerNextToTile()
 	{
-		return this.type == TYPE.CONSTRUCT || this.type == TYPE.INSTALL || this.type == TYPE.UNINSTALL || this.type == TYPE.MINER_WORK;
+		return this.type == TYPE.CONSTRUCT || this.type == TYPE.INSTALL || this.type == TYPE.MINER_WORK; //  || this.type == TYPE.UNINSTALL
 	}
 
 	public void cancel()
