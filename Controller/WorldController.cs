@@ -47,6 +47,8 @@ public class WorldController : MonoBehaviour
 			world.SetupBlankWorld();
 		} else {
 			world.SetupWorldFromData(WorldController.saveGame);
+			Camera.main.transform.position = new Vector3(WorldController.saveGame.camera.item1, WorldController.saveGame.camera.item2, -10);
+			Camera.main.orthographicSize = WorldController.saveGame.camera.item3;
 			WorldController.saveGame = null;
 		}
 		GetComponentInChildren<TileSpritesView>().RenderWorld();
