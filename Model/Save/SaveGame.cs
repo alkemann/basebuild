@@ -8,6 +8,9 @@ using UnityEngine;
 [XmlRoot("data")]
 public class SaveGame
 {
+
+	[XmlElement("camera")]
+	public Tuple3<float, float, float> camera;
 	[XmlElement("world")]
 	public WorldData world;
 
@@ -22,6 +25,11 @@ public class SaveGame
 
 	public void Save (World world, string name = "SaveGameQuick")
 	{
+		float x = Camera.main.transform.position.x;
+		float y = Camera.main.transform.position.y;
+		float z = Camera.main.orthographicSize;
+		this.camera = new Tuple3<float, float, float>(x, y, z);
+
 		this.world = new WorldData(world);
 		workers = new List<WorkerData>(10);
 		foreach (Worker worker in world.workers) {
