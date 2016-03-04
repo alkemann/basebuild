@@ -73,7 +73,7 @@ public class World
 			workers.Add(worker);
 			if (cbWorkerCreated != null)
 				cbWorkerCreated(worker);
-			registerOnTick(worker.tick); // make sure workers can react to tick
+			RegisterOnTick(worker.tick); // make sure workers can react to tick
 		}
 	}
 
@@ -89,7 +89,7 @@ public class World
 			return; // Cant create workers on empty
 		Worker w = new Worker(t, UnityEngine.Random.Range(4.5f, 7.5f), UnityEngine.Random.Range(0.5f, 5f));
 		workers.Add(w);
-		registerOnTick(w.tick); // make sure workers can react to tick
+		RegisterOnTick(w.tick); // make sure workers can react to tick
 
 		if (cbWorkerCreated != null)
 			cbWorkerCreated(w);
@@ -303,12 +303,12 @@ public class World
 		cbTileChanged -= cb;
 	}
 
-	public void registerOnTick (Action<float> cb)
+	public void RegisterOnTick (Action<float> cb)
 	{
 		cbTick += cb;
 	}
 
-	public void unregistOnTick (Action<float> cb)
+	public void UnRegisterOnTick (Action<float> cb)
 	{
 		cbTick -= cb;
 	}

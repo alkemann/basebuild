@@ -30,12 +30,12 @@ public class Furniture {
 		if (type == TYPE.TERMINAL) {
 			// TODO how to cleanly place furniture code like this
 			coolDown = UnityEngine.Random.Range(2f, 3f); // set first cooldown
-			tile.world.registerOnTick(terminalTrigger);
+			tile.world.RegisterOnTick(terminalTrigger);
 		}
 		if (type == TYPE.MINER) {
 			// TODO how to cleanly place furniture code like this
 			coolDown = UnityEngine.Random.Range(10f, 15f); // set first cooldown
-			tile.world.registerOnTick(minerTrigger);
+			tile.world.RegisterOnTick(minerTrigger);
 		}
 	}
 
@@ -52,6 +52,9 @@ public class Furniture {
 			tile.world.createCustomJobAt(tile.X, tile.Y, 5f, Job.TYPE.TERMINAL_WORK);
 			coolDown = UnityEngine.Random.Range(5f, 6f); // reset cooldown
 		}
+		RegisterOnUnInstallCallback((f) => {
+			tile.world.UnRegisterOnTick(terminalTrigger);
+		});
 	}
 
 	void minerTrigger (float time)
@@ -62,6 +65,9 @@ public class Furniture {
 			tile.world.createCustomJobAt(tile.X, tile.Y, 5f, Job.TYPE.MINER_WORK);
 			coolDown = UnityEngine.Random.Range(10f, 15f); // reset cooldown
 		}
+		RegisterOnUnInstallCallback((f) => {
+			tile.world.UnRegisterOnTick(minerTrigger);
+		});
 	}
 
 	public void uninstall ()
