@@ -18,10 +18,13 @@ public class SaveGame
 	[XmlArrayItem("worker")]
 	public List<WorkerData> workers;
 
+	[XmlArray("jobs")]
+	[XmlArrayItem("job")]
+	public List<JobData> jobs;
+
 	[XmlArray("tiles")]
 	[XmlArrayItem("tile")]
 	public List<TileData> tiles;
-	// TODO Save job queue?
 
 	public void Save (World world, string name = "SaveGameQuick")
 	{
@@ -40,6 +43,11 @@ public class SaveGame
 		foreach (Tile tile in world.tiles) {
 			if (tile.isInstalled() || tile.isWalkable())
 				tiles.Add(new TileData(tile));
+		}
+
+		jobs = new List<JobData>();
+		foreach (Job job in world.jobs) {
+			jobs.Add(new JobData(job));
 		}
 
 		XmlSerializer serializer = new XmlSerializer(typeof(SaveGame));

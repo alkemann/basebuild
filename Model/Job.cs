@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class Job {
@@ -9,12 +9,13 @@ public class Job {
 
 	public TYPE type { get; protected set; }
 	public Tile tile { get; protected set; }
+	public Dictionary<string, object> meta;
 
 	Action<Job> cbOnComplete;
 	Action<Job> cbOnCancel;
 	float work = 2f;
 
-	public Job (Tile tile, float work = 2f, TYPE type = TYPE.INSTALL)
+	public Job (Tile tile, float work = 2f, TYPE type = TYPE.INSTALL, Dictionary<string, object> meta = null)
 	{
 		if (tile != null) {
 			this.tile = tile;
@@ -22,6 +23,7 @@ public class Job {
 		}
 		this.work = work;
 		this.type = type;
+		this.meta = meta;
 	}
 
 	public bool ShouldWorkerNextToTile()
@@ -34,6 +36,11 @@ public class Job {
 		if (cbOnCancel != null) {
 			cbOnCancel (this);
 		}
+	}
+
+	public float WorkLeft()
+	{
+		return work;
 	}
 
 	public bool doWork(float work)

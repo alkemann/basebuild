@@ -75,6 +75,30 @@ public class World
 				cbWorkerCreated(worker);
 			RegisterOnTick(worker.tick); // make sure workers can react to tick
 		}
+
+		foreach (JobData job_data in data.jobs) {
+			switch ((Job.TYPE)job_data.type) {
+				case Job.TYPE.INSTALL:
+					int t;
+					if (Int32.TryParse((string) job_data.GetMeta("ftype"), out t))
+						createInstallJobAt((Furniture.TYPE) t, job_data.x, job_data.y);
+					break;
+				case Job.TYPE.UNINSTALL:
+					createUninstallJobAt(job_data.x, job_data.y);
+					break;
+				case Job.TYPE.MOVE:
+					createMoveJobAt(job_data.x, job_data.y);
+					break;
+				case Job.TYPE.MINER_WORK:
+				case Job.TYPE.TERMINAL_WORK:
+					createCustomJobAt(job_data.x, job_data.y, (float) job_data.work, (Job.TYPE) job_data.type);
+					break;
+				//case Job.TYPE.CONSTRUCT:
+				default:
+					Debug.LogError("Unspecified job type");
+					break;
+			}
+		}
 	}
 
 	public Stack<Tile> findPath (Tile from, Tile to)
@@ -165,7 +189,10 @@ public class World
 		if (tile.isValidInstallation(type) == false || tile.isWalkable() == false)
 			return null;
 
-		Job job = new Job(tile, Furniture.costs[(int)type], Job.TYPE.INSTALL);
+		Dictionary<string, object> meta = new Dictionary<string, object>();
+		meta.Add("ftype", (int) type);
+		meta.Add("fcost", Furniture.costs[(int)type]);
+		Job job = new Job(tile, Furniture.costs[(int)type], Job.TYPE.INSTALL, meta);
 		jobs.Add(job);
 		job.registerOnCompleteCallback((j) => {
 			Tile job_tile = j.tile;

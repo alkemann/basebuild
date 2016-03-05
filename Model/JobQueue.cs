@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 
 public class JobQueue {
@@ -81,5 +81,9 @@ public class JobQueue {
 			return 0;
 		}
 		return path.Count;
+	}
+	public IEnumerator<Job> GetEnumerator()
+	{
+		return jobQueue.GetEnumerator();
 	}
 }
